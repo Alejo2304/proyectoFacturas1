@@ -53,12 +53,13 @@ class ControlCliente():
 
     def guardar(self):
         msg = "ok"
-        cod= self.objPersona.getCodigo() 
-        nom= self.objPersona.getNombre()
-        tel= self.objPersona.getTelefono() 
-        ema= self.objPersona.getEmail()
-        cre= self.objPersona.getCredito()
-
+        #Corrected the code, per inheritance, the methods are definend on ObjCliente
+        cod= self.objCliente.getCodigo() 
+        nom= self.objCliente.getNombre()
+        tel= self.objCliente.getTelefono() 
+        ema= self.objCliente.getEmail()
+        cre= self.objCliente.getCredito()
+        
         try:
             comandoSql = "INSERT INTO persona(codigo,nombre,telefono,email) VALUES ('{}','{}','{}','{}')".format(cod,nom,tel,ema)
             objControlConexion =  ControlConexion()
