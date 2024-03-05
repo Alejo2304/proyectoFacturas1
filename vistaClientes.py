@@ -97,8 +97,18 @@ def vista_Clientes():
             pass
         elif bt=='Modificar':
             pass
-        elif bt=='Borrar':
-            pass
+        
+        elif bt=='Borrar': #hay que comentarlo xd
+            try: 
+                objPersona= Persona(cod,nom,tel,ema)
+                objCliente= Cliente(cre)
+                objControlCliente= ControlCliente(objPersona,objCliente)
+                objControlCliente.borrar() #this will delete the records from the database
+
+            except Exception as objException:
+                msg="Algo salió mal: {}".format(objException)
+            return redirect('/vistaClientes')
+        
         elif bt=='BorrarVarios':
             pass
     

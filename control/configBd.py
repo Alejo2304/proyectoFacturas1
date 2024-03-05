@@ -1,5 +1,5 @@
 
-#Servidor Local --- QUE NO SIRVE AAAAAAAA
+#Servidor Local 
 serv="localhost"
 usua="postgres"
 passw="postgres"

@@ -53,30 +53,58 @@ class ControlCliente():
 
     def guardar(self):
         msg = "ok"
-        #Corrected the code, per inheritance, the methods are definend on ObjCliente
-        cod= self.objCliente.getCodigo() 
-        nom= self.objCliente.getNombre()
-        tel= self.objCliente.getTelefono() 
-        ema= self.objCliente.getEmail()
+        
+        cod= self.objPersona.getCodigo() 
+        nom= self.objPersona.getNombre()
+        tel= self.objPersona.getTelefono() 
+        ema= self.objPersona.getEmail()
         cre= self.objCliente.getCredito()
         
         try:
-            comandoSql = "INSERT INTO persona(codigo,nombre,telefono,email) VALUES ('{}','{}','{}','{}')".format(cod,nom,tel,ema)
+            
             objControlConexion =  ControlConexion()
             msg=objControlConexion.abrirBd(usua,passw,serv,port,bdat)
+
+            comandoSql = "INSERT INTO persona(codigo,nombre,telefono,email) VALUES ('{}','{}','{}','{}')".format(cod,nom,tel,ema)
             cursor = objControlConexion.ejecutarComandoSql(comandoSql)
 
             comandoSql = "INSERT INTO cliente(credito,fkcodpersona,fkcodempresa) VALUES ({},'{}',null)".format(cre,cod)
             cursor = objControlConexion.ejecutarComandoSql(comandoSql)
+
             if (cursor.rowcount> 0):
                 msg=objControlConexion.cerrarBd()
+
+        except Exception as objException:
+            msg="Algo salió mal: {}".format(objException)
+            print(msg)
+            
+        return msg
+
+    def borrar(self): #hay que comentarlo xd
+        cod = self.objPersona.getCodigo() 
+        try:
+            objControlConexion =  ControlConexion()
+            msg=objControlConexion.abrirBd(usua,passw,serv,port,bdat)
+
+            comandoSql = "BEGIN;"
+            cursor = objControlConexion.ejecutarComandoSql(comandoSql)
+
+            comandoSql = "DELETE FROM cliente WHERE fkcodpersona = '{}';".format(cod);
+            cursor = objControlConexion.ejecutarComandoSql(comandoSql)
+
+            comandoSql = "DELETE FROM persona WHERE codigo = '{}';".format(cod)
+            cursor = objControlConexion.ejecutarComandoSql(comandoSql)
+
+            comandoSql = "END;"
+            cursor = objControlConexion.ejecutarComandoSql(comandoSql)
+
+            if (cursor.rowcount> 0):
+                msg=objControlConexion.cerrarBd()
+
         except Exception as objException:
             msg="Algo salió mal: {}".format(objException)
             print(msg)
         return msg
-
-    def borrar(self):
-        pass
     
     def modificar(self):
         pass
