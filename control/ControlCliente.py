@@ -107,4 +107,25 @@ class ControlCliente():
         return msg
     
     def modificar(self):
-        pass
+        cod = self.objPersona.getCodigo()
+        nom = self.objPersona.getNombre()
+        tel = self.objPersona.getTelefono()
+        ema = self.objPersona.getEmail()
+        cre = self.objCliente.getCredito()
+
+        try:
+            objControlConexion = ControlConexion()
+            msg = objControlConexion.abrirBd(usua, passw, serv, port, bdat)
+
+            comandoSql = "INSERT INTO persona (codigo, nombre, telefono, email) VALUES ('{}', '{}', '{}', '{}') ON CONFLICT (codigo) DO UPDATE SET nombre = '{}', telefono = '{}', email = '{}'".format(cod, nom, tel, ema, nom, tel, ema)
+            cursor = objControlConexion.ejecutarComandoSql(comandoSql)
+
+            comandoSql = "INSERT INTO cliente (fkcodpersona, credito) VALUES ('{}', {}) ON CONFLICT (fkcodpersona) DO UPDATE SET credito = excluded.credito".format(cod, cre)
+            cursor = objControlConexion.ejecutarComandoSql(comandoSql)
+
+            if cursor.rowcount > 0:
+                msg = objControlConexion.cerrarBd()
+        except Exception as objException:
+            msg = "Algo salió mal: {}".format(objException)
+            print(msg)
+        return msg

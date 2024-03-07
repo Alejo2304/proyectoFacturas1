@@ -96,7 +96,23 @@ def vista_Clientes():
         elif bt=='Consultar':
             pass
         elif bt=='Modificar':
-            pass
+            try:
+                objPersona= Persona(cod,nom,tel,ema)
+                objCliente= Cliente(cre)
+                objControlCliente= ControlCliente(objPersona,objCliente)
+                objControlCliente.modificar()        
+            except Exception as objException:
+                msg="Algo salió mal: {}".format(objException)
+            return redirect('/vistaClientes')	
+        elif bt=='Borrar':
+            try:
+                objPersona= Persona(cod,nom,tel,ema)
+                objCliente= Cliente(cre)
+                objControlCliente= ControlCliente(objPersona,objCliente)
+                objControlCliente.borrar()        
+            except Exception as objException:
+                msg="Algo salió mal: {}".format(objException)
+            return redirect('/vistaClientes')
         
         elif bt=='Borrar': #hay que comentarlo xd
             try: 
