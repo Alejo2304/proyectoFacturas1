@@ -43,10 +43,12 @@ def vista_Clientes():
     numPaginas=math.ceil(totalItems/itemsxpagina)
     
     paginaActiva = request.args.get('paginaActiva')
-    if paginaActiva==None: paginaActiva='1'            
+    if paginaActiva==None: 
+        paginaActiva='1'            
     posInicial=(int(paginaActiva)-1)*itemsxpagina
     posFinal=posInicial+itemsxpagina
-    if posFinal>totalItems: posFinal=totalItems
+    if posFinal>totalItems:
+        posFinal=totalItems
     rango=range(posInicial,posFinal)
     itemsMostrados=len(rango)
     itemsCombo2=[5,10,20,30,50,100,200,1]
@@ -90,11 +92,28 @@ def vista_Clientes():
 
             except Exception as objException:
                 msg="Algo salió mal: {}".format(objException)
-            return redirect('/vistaClientes')		
-
-
+            return redirect('/vistaClientes')	
+        	
         elif bt=='Consultar':
-            pass
+            #pass
+            try:    
+                objPersona= Persona(cod,nom,tel,ema)
+                objCliente= Cliente(cre)
+                objControlCliente= ControlCliente(objPersona,objCliente)
+                objControlCliente.consultar()
+
+                nom = objControlCliente.objCliente.getNombre()
+                tel = objControlCliente.objCliente.getTelefono()
+                ema = objControlCliente.objCliente.getEmail()
+                cre = objControlCliente.objCliente.getCredito()
+                print(nom, tel, ema, cre)
+
+
+            except Exception as objException:
+                msg="Algo salió mal: {}".format(objException)
+            
+            #return redirect('/vistaClientes')
+        
         elif bt=='Modificar':
             try:
                 objPersona= Persona(cod,nom,tel,ema)
