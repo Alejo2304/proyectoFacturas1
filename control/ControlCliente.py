@@ -36,8 +36,8 @@ class ControlCliente():
                     objCliente = Cliente(0)
                     objCliente.setCodigo(fila[0])
                     objCliente.setNombre(fila[1])
-                    objCliente.setTelefono(fila[2])
-                    objCliente.setEmail(fila[3])
+                    objCliente.setEmail(fila[2]) #corrected bug with setEmail and setTelefono
+                    objCliente.setTelefono(fila[3])
                     objCliente.setcredito(fila[5])
                     arregloClientes.append(objCliente)
             objControlConexion.cerrarBd()
@@ -65,8 +65,8 @@ class ControlCliente():
                     self.objCliente = Cliente(0)
                     self.objCliente.setCodigo(fila[0])
                     self.objCliente.setNombre(fila[1])
-                    self.objCliente.setTelefono(fila[2])
-                    self.objCliente.setEmail(fila[3])
+                    self.objCliente.setEmail(fila[2]) #fixed bug with setEmail and setTelefono
+                    self.objCliente.setTelefono(fila[3])
                     self.objCliente.setcredito(fila[5])
             objControlConexion.cerrarBd()
         except Exception as objException:
