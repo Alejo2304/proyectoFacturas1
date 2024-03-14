@@ -14,6 +14,15 @@ vistaClientes=Blueprint("vistaClientes",__name__,static_folder="static",template
 @vistaClientes.route("/")
 
 def vista_Clientes():
+    """
+    This function handles the logic for the 'vista_Clientes' view.
+
+    It retrieves a list of clients, performs pagination, and handles various form submissions.
+
+    Returns:
+        A rendered template with the necessary data for the view.
+    """
+    
     arregloClientes=[]
     cliente = {
     'codigo': '',
@@ -22,6 +31,7 @@ def vista_Clientes():
     'email':'',
     'credito':0
     }
+    
     if 'ema' in session:
         ema=session['ema']
         permisoParaEntrar=False
@@ -102,18 +112,20 @@ def vista_Clientes():
                 objControlCliente= ControlCliente(objPersona,objCliente)
                 objControlCliente.consultar()
 
-                nom = objControlCliente.objCliente.getNombre()
-                tel = objControlCliente.objCliente.getTelefono()
-                ema = objControlCliente.objCliente.getEmail()
-                cre = objControlCliente.objCliente.getCredito()
-                print(nom, tel, ema, cre)
+                cliente['codigo']=objControlCliente.objCliente.getCodigo()
+                cliente['nombre']=objControlCliente.objCliente.getNombre()
+                cliente['telefono']=objControlCliente.objCliente.getTelefono()
+                cliente['email']=objControlCliente.objCliente.getEmail()
+                cliente['credito']=objControlCliente.objCliente.getCredito()
+
+                return render_template('/vistaClientes.html',ema=ema,arregloClientes=arregloClientes,cliente=cliente,paginacion=paginacion)
 
 
             except Exception as objException:
                 msg="Algo salió mal: {}".format(objException)
+
             
-            #return redirect('/vistaClientes')
-        
+            return redirect('/vistaClientes')  
         elif bt=='Modificar':
             try:
                 objPersona= Persona(cod,nom,tel,ema)
@@ -123,6 +135,7 @@ def vista_Clientes():
             except Exception as objException:
                 msg="Algo salió mal: {}".format(objException)
             return redirect('/vistaClientes')	
+        	
         elif bt=='Borrar':
             try:
                 objPersona= Persona(cod,nom,tel,ema)
@@ -133,19 +146,10 @@ def vista_Clientes():
                 msg="Algo salió mal: {}".format(objException)
             return redirect('/vistaClientes')
         
-        elif bt=='Borrar': #hay que comentarlo xd
-            try: 
-                objPersona= Persona(cod,nom,tel,ema)
-                objCliente= Cliente(cre)
-                objControlCliente= ControlCliente(objPersona,objCliente)
-                objControlCliente.borrar() #this will delete the records from the database
-
-            except Exception as objException:
-                msg="Algo salió mal: {}".format(objException)
-            return redirect('/vistaClientes')
         
         elif bt=='BorrarVarios':
             pass
-    
+
+    print("esto es un test",cliente)
     return render_template('/vistaClientes.html',ema=ema,arregloClientes=arregloClientes,cliente=cliente,paginacion=paginacion)
 
