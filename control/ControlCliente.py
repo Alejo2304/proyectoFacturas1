@@ -76,6 +76,7 @@ class ControlCliente():
         return self.objCliente
 
     def guardar(self):
+        
         """
         Saves a client and person information to the database.
 
@@ -91,7 +92,7 @@ class ControlCliente():
         cre = self.objCliente.getCredito()
         
         try:
-            objControlConexion =  ControlConexion()
+            objControlConexion = ControlConexion()
             msg = objControlConexion.abrirBd(usua, passw, serv, port, bdat)
 
             comandoSql = "INSERT INTO persona(codigo, nombre, telefono, email) VALUES ('{}', '{}', '{}', '{}')".format(cod, nom, tel, ema)

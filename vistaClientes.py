@@ -118,8 +118,6 @@ def vista_Clientes():
                 cliente['email']=objControlCliente.objCliente.getEmail()
                 cliente['credito']=objControlCliente.objCliente.getCredito()
 
-                print("esto es un test", objControlCliente.objCliente.getTelefono())
-
                 return render_template('/vistaClientes.html',ema=ema,arregloClientes=arregloClientes,cliente=cliente,paginacion=paginacion)
 
 
@@ -152,6 +150,5 @@ def vista_Clientes():
         elif bt=='BorrarVarios':
             pass
 
-    print("esto es un test",cliente)
     return render_template('/vistaClientes.html',ema=ema,arregloClientes=arregloClientes,cliente=cliente,paginacion=paginacion)
 

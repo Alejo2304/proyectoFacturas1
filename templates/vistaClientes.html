@@ -69,20 +69,21 @@
 									<option>{{ itemCombo2 }}</option>
 									{% endfor %}
 								</select>
-							</li>
+							</li> 
+							<!-- Fixed bug with pagination, replace the href vistaRoles for vistaClientes -->
 							<li class="page-item {% if paginacion['paginaActiva']|int <= 1 %} disabled {% else %}  {% endif %}">
-								<a href="\vistaRoles?paginaActiva={{ paginacion['paginaActiva']|int -1 }}" class="page-link">Anterior</a>
+								<a href="\vistaClientes?paginaActiva={{ paginacion['paginaActiva']|int -1 }}" class="page-link">Anterior</a>
 							</li>
 
 							{% for i in range(paginacion['numPaginas']) %}
 							<!--<li class="page-item active">-->
 							<li class="page-item {% if paginacion['paginaActiva']|int == i+1 %} active {% else %}  {% endif %} ">
-								<a href="\vistaRoles?paginaActiva={{ i+1 }}" class="page-link">{{ i+1 }}</a>
+								<a href="\vistaClientes?paginaActiva={{ i+1 }}" class="page-link">{{ i+1 }}</a>
 							</li>
 							{% endfor %}
 
 							<li class="page-item {% if paginacion['paginaActiva']|int >= paginacion['numPaginas'] %} disabled {% else %}  {% endif %}">
-								<a href="\vistaRoles?paginaActiva={{ paginacion['paginaActiva']|int + 1 }}" class="page-link">Siguiente</a>
+								<a href="\vistaClientess?paginaActiva={{ paginacion['paginaActiva']|int + 1 }}" class="page-link">Siguiente</a>
 							</li>
 						</ul>
 					</div>
