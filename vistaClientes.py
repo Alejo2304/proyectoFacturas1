@@ -8,11 +8,15 @@ from control.ControlCliente import ControlCliente
 
 
 
+
 vistaClientes=Blueprint("vistaClientes",__name__,static_folder="static",template_folder="templates")
 
 @vistaClientes.route("/vistaClientes",methods = ['GET', 'POST'])
-@vistaClientes.route("/")
 
+@vistaClientes.route('/submit', methods=['POST'])
+
+
+@vistaClientes.route("/")
 def vista_Clientes():
     """
     This function handles the logic for the 'vista_Clientes' view.
@@ -48,7 +52,7 @@ def vista_Clientes():
     msg="ok"
     objControlCliente=ControlCliente(None)
     arregloClientes=objControlCliente.listar()
-    itemsxpagina=5
+    itemsxpagina= int(request.form.get('combo2'))
     totalItems=len(arregloClientes)
     numPaginas=math.ceil(totalItems/itemsxpagina)
     
@@ -73,6 +77,7 @@ def vista_Clientes():
         "itemsCombo2":itemsCombo2
         }
 
+
     if request.method == 'GET':
         pass
     if request.method == 'POST':
@@ -82,9 +87,13 @@ def vista_Clientes():
         tel=markupsafe.escape(request.form['txtTelefono'])
         ema=markupsafe.escape(request.form['txtEmail'])
         cre=markupsafe.escape(request.form['txtCredito'])
+        paginacion['itemsxpagina']=int(markupsafe.escape(request.form.get('combo2')))
+        
+
         btnMsg=markupsafe.escape(request.form.get('btnMsg'))
         cheks = request.form.getlist('options[]')
-        combo2=request.form.get('combo2')                            
+
+        
         cliente = {
         'codigo': cod,
         'nombre': nom,
@@ -92,6 +101,21 @@ def vista_Clientes():
         'email':ema,
         'credito':cre
         }
+
+        if request.form.get('combo2') != paginacion['itemsxpagina']:
+            paginacion['itemsxpagina'] = request.form.get('combo2')
+            posInicial = (int(paginaActiva) - 1) * int(paginacion['itemsxpagina'])
+            posFinal = posInicial + int(paginacion['itemsxpagina'])
+            if posFinal > totalItems:
+                posFinal = totalItems
+            rango = range(posInicial, posFinal)
+            itemsMostrados = len(rango)
+            paginacion['posInicial'] = posInicial
+            paginacion['rango'] = rango
+            paginacion['itemsMostrados'] = itemsMostrados
+
+
+            return render_template('/vistaClientes.html',ema=ema,arregloClientes=arregloClientes,cliente=cliente,paginacion=paginacion)
         
         if bt=='Guardar':
             try:
@@ -149,6 +173,5 @@ def vista_Clientes():
         
         elif bt=='BorrarVarios':
             pass
-
     return render_template('/vistaClientes.html',ema=ema,arregloClientes=arregloClientes,cliente=cliente,paginacion=paginacion)
 

@@ -63,12 +63,13 @@
 						<ul class="pagination">
 							<!--<li class="page-item disabled"><a href="#">Previous</a></li>-->
 							<li class="page-item >
-								<label for="combo2"></label>
-								<select class="form-control" id="combo2" name="combo2">
-									{% for itemCombo2 in paginacion['itemsCombo2'] %}
-									<option>{{ itemCombo2 }}</option>
-									{% endfor %}
-								</select>
+								<form id="myForm" action="/submit" method="post">
+									<select class="form-control" id="combo2" name="combo2" onchange="this.form.submit()">
+										{% for itemCombo2 in paginacion['itemsCombo2'] %}
+										<option value="{{ itemCombo2 }}" {% if itemCombo2|string == paginacion['itemsxpagina']|string %} selected {% endif %}>{{ itemCombo2 }}</option>
+                						{% endfor %}
+									</select>
+								</form>
 							</li> 
 							<!-- Fixed bug with pagination, replace the href vistaRoles for vistaClientes -->
 							<li class="page-item {% if paginacion['paginaActiva']|int <= 1 %} disabled {% else %}  {% endif %}">
