@@ -52,14 +52,19 @@ def vista_Clientes():
     msg="ok"
     objControlCliente=ControlCliente(None)
     arregloClientes=objControlCliente.listar()
-    itemsxpagina= int(request.form.get('combo2'))
+    itemsxpagina= request.form.get('combo2')
+    if itemsxpagina==None:
+        itemsxpagina=5
+
     totalItems=len(arregloClientes)
-    numPaginas=math.ceil(totalItems/itemsxpagina)
+    numPaginas=math.ceil(totalItems/int(itemsxpagina))
     
     paginaActiva = request.args.get('paginaActiva')
     if paginaActiva==None: 
-        paginaActiva='1'            
-    posInicial=(int(paginaActiva)-1)*itemsxpagina
+        paginaActiva=1      
+
+    itemsxpagina=int(itemsxpagina)      
+    posInicial=paginaActiva-1*itemsxpagina
     posFinal=posInicial+itemsxpagina
     if posFinal>totalItems:
         posFinal=totalItems
