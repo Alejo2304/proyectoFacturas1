@@ -84,7 +84,7 @@
 							{% endfor %}
 
 							<li class="page-item {% if paginacion['paginaActiva']|int >= paginacion['numPaginas'] %} disabled {% else %}  {% endif %}">
-								<a href="\vistaClientess?paginaActiva={{ paginacion['paginaActiva']|int + 1 }}" class="page-link">Siguiente</a>
+								<a href="\vistaClientes?paginaActiva={{ paginacion['paginaActiva']|int + 1 }}" class="page-link">Siguiente</a>
 							</li>
 						</ul>
 					</div>

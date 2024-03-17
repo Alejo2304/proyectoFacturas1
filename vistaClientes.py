@@ -52,36 +52,41 @@ def vista_Clientes():
     msg="ok"
     objControlCliente=ControlCliente(None)
     arregloClientes=objControlCliente.listar()
-    itemsxpagina= request.form.get('combo2')
-    if itemsxpagina==None:
-        itemsxpagina=5
 
-    totalItems=len(arregloClientes)
-    numPaginas=math.ceil(totalItems/int(itemsxpagina))
+    def updatePagination(arreglo):
+        totalItems=len(arreglo)
+        itemsxpagina=request.form.get('combo2')
+        if itemsxpagina==None:
+            itemsxpagina=5
+
+        paginaActiva = int(request.args.get('paginaActiva'))
+        if paginaActiva==None: 
+            paginaActiva=1  
+
+        itemsxpagina, paginaActiva = int(itemsxpagina), int(paginaActiva)
+        numPaginas=math.ceil(totalItems/int(itemsxpagina))
+        posInicial=paginaActiva-1*itemsxpagina
+        posFinal=posInicial+itemsxpagina
+
+        if posFinal>totalItems:
+            posFinal=totalItems
+
+        rango=range(posInicial,posFinal)
+        itemsMostrados=len(rango)
+        itemsCombo2=[5,10,20,30,50,100,200,1]
+        paginacion={
+            "itemsxpagina":itemsxpagina,
+            "totalItems":totalItems,
+            "numPaginas":numPaginas,
+            "paginaActiva":paginaActiva,
+            "posInicial":posInicial,
+            "rango":rango,
+            "itemsMostrados":itemsMostrados,
+            "itemsCombo2":itemsCombo2
+            }
+        return paginacion
     
-    paginaActiva = request.args.get('paginaActiva')
-    if paginaActiva==None: 
-        paginaActiva=1      
-
-    itemsxpagina=int(itemsxpagina)      
-    posInicial=paginaActiva-1*itemsxpagina
-    posFinal=posInicial+itemsxpagina
-    if posFinal>totalItems:
-        posFinal=totalItems
-    rango=range(posInicial,posFinal)
-    itemsMostrados=len(rango)
-    itemsCombo2=[5,10,20,30,50,100,200,1]
-    paginacion={
-        "itemsxpagina":itemsxpagina,
-        "totalItems":totalItems,
-        "numPaginas":numPaginas,
-        "paginaActiva":paginaActiva,
-        "posInicial":posInicial,
-        "rango":rango,
-        "itemsMostrados":itemsMostrados,
-        "itemsCombo2":itemsCombo2
-        }
-
+    paginacion=updatePagination(arregloClientes)
 
     if request.method == 'GET':
         pass
@@ -92,7 +97,7 @@ def vista_Clientes():
         tel=markupsafe.escape(request.form['txtTelefono'])
         ema=markupsafe.escape(request.form['txtEmail'])
         cre=markupsafe.escape(request.form['txtCredito'])
-        paginacion['itemsxpagina']=int(markupsafe.escape(request.form.get('combo2')))
+        paginacion['itemsxpagina']=markupsafe.escape(request.form.get('combo2'))
         
 
         btnMsg=markupsafe.escape(request.form.get('btnMsg'))
@@ -108,17 +113,7 @@ def vista_Clientes():
         }
 
         if request.form.get('combo2') != paginacion['itemsxpagina']:
-            paginacion['itemsxpagina'] = request.form.get('combo2')
-            posInicial = (int(paginaActiva) - 1) * int(paginacion['itemsxpagina'])
-            posFinal = posInicial + int(paginacion['itemsxpagina'])
-            if posFinal > totalItems:
-                posFinal = totalItems
-            rango = range(posInicial, posFinal)
-            itemsMostrados = len(rango)
-            paginacion['posInicial'] = posInicial
-            paginacion['rango'] = rango
-            paginacion['itemsMostrados'] = itemsMostrados
-
+            updatePagination(arregloClientes)
 
             return render_template('/vistaClientes.html',ema=ema,arregloClientes=arregloClientes,cliente=cliente,paginacion=paginacion)
         
