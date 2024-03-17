@@ -59,13 +59,13 @@ def vista_Clientes():
         if itemsxpagina==None:
             itemsxpagina=5
 
-        paginaActiva = int(request.args.get('paginaActiva'))
+        paginaActiva = request.args.get('paginaActiva')
         if paginaActiva==None: 
             paginaActiva=1  
 
         itemsxpagina, paginaActiva = int(itemsxpagina), int(paginaActiva)
         numPaginas=math.ceil(totalItems/int(itemsxpagina))
-        posInicial=paginaActiva-1*itemsxpagina
+        posInicial=(paginaActiva-1)*itemsxpagina
         posFinal=posInicial+itemsxpagina
 
         if posFinal>totalItems:
