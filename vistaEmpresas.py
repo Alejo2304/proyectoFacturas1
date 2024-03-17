@@ -47,7 +47,7 @@ def vista_Clientes():
         return redirect('/')  
     msg="ok"
     objControlEmpresa=ControlEmpresa(None)
-    arregloClientes=objControlEmpresa.listar()
+    arregloEmpresas=objControlEmpresa.listar()
 
     def updatePagination(arreglo):
         totalItems=len(arreglo)
