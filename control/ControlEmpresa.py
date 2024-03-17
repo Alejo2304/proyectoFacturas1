@@ -51,16 +51,15 @@ class ControlEmpresa():
         """
         msg = "ok"
         cod = self.objEmpresa.getCodigo()
-        comandoSql = "SELECT * FROM empresa WHERE codigo  = '{}'".format(cod)
+        comandoSql = "SELECT * FROM empresa WHERE codigo = '{}'".format(cod)
         objControlConexion = ControlConexion()
         msg = objControlConexion.abrirBd(usua, passw, serv, port, bdat)
         cursor = objControlConexion.ejecutarComandoSql(comandoSql)
         try:
             if cursor.rowcount > 0: 
                 for fila in cursor:
-                    objEmpresa = Empresa(0)
-                    objEmpresa.setCodigo(fila[0])
-                    objEmpresa.setNombre(fila[1])
+                    self.objEmpresa.setCodigo(fila[0])
+                    self.objEmpresa.setNombre(fila[1])
             objControlConexion.cerrarBd()
         except Exception as objException:
             msg = "Algo salió mal: {}".format(objException)
@@ -71,7 +70,7 @@ class ControlEmpresa():
     def guardar(self):
         
         """
-        Saves an Empresa56 information to the database.
+        Saves an Empresa information to the database.
 
         Returns:
             A message indicating the status of the operation.
@@ -85,7 +84,7 @@ class ControlEmpresa():
             objControlConexion = ControlConexion()
             msg = objControlConexion.abrirBd(usua, passw, serv, port, bdat)
 
-            comandoSql = "INSERT INTO empresa(codigo, nombre) VALUES ('{}', '{}')".format(cod, nom)
+            comandoSql = "INSERT INTO empresa(codigo, nombre) VALUES('{}', '{}')".format(cod, nom)
             cursor = objControlConexion.ejecutarComandoSql(comandoSql)
 
             if cursor.rowcount > 0:

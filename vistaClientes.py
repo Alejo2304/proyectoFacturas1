@@ -15,8 +15,8 @@ vistaClientes=Blueprint("vistaClientes",__name__,static_folder="static",template
 
 @vistaClientes.route('/submit', methods=['POST'])
 
-
 @vistaClientes.route("/")
+
 def vista_Clientes():
     """
     This function handles the logic for the 'vista_Clientes' view.

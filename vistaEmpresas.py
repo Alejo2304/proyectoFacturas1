@@ -5,14 +5,13 @@ import math
 from modelo.Empresa import Empresa
 from control.ControlEmpresa import ControlEmpresa
 
-
-
-
 vistaEmpresas=Blueprint("vistaEmpresas",__name__,static_folder="static",template_folder="templates")
 
-@vistaEmpresas.route("/vistaEmpresas", methods=['GET', 'POST'], defaults={'path': ''})
-@vistaEmpresas.route("/vistaEmpresas/<path:path>", methods=['GET', 'POST'])
-def vista_Empresas(path):
+@vistaEmpresas.route("/vistaEmpresas",methods = ['GET', 'POST'])
+@vistaEmpresas.route('/submit', methods=['POST'])
+@vistaEmpresas.route("/")
+
+def vista_Empresas():
     """
     This function handles the logic for the 'vista_Empresas' view.
 
@@ -106,7 +105,7 @@ def vista_Empresas(path):
         if bt=='Guardar':
             try:
                 objEmpresa= Empresa(cod,nom)
-                objControlEmpresa = objControlEmpresa(objEmpresa)
+                objControlEmpresa = ControlEmpresa(objEmpresa)
                 objControlEmpresa.guardar()  
 
             except Exception as objException:
@@ -117,7 +116,7 @@ def vista_Empresas(path):
             #pass
             try:    
                 objEmpresa= Empresa(cod,nom)
-                objControlEmpresa = objControlEmpresa(objEmpresa)
+                objControlEmpresa = ControlEmpresa(objEmpresa)
                 objControlEmpresa.consultar()
 
                 empresa['codigo']=objControlEmpresa.objEmpresa.getCodigo()
@@ -135,7 +134,7 @@ def vista_Empresas(path):
         elif bt=='Modificar':
             try:
                 objEmpresa= Empresa(cod,nom)
-                objControlEmpresa = objControlEmpresa(objEmpresa)
+                objControlEmpresa = ControlEmpresa(objEmpresa)
                 objControlEmpresa.modificar() 
 
             except Exception as objException:
@@ -145,7 +144,7 @@ def vista_Empresas(path):
         elif bt=='Borrar':
             try:
                 objEmpresa= Empresa(cod,nom)
-                objControlEmpresa = objControlEmpresa(objEmpresa)
+                objControlEmpresa = ControlEmpresa(objEmpresa)
                 objControlEmpresa.borrar()       
             except Exception as objException:
                 msg="Algo salió mal: {}".format(objException)
