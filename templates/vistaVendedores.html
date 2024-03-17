@@ -4,7 +4,7 @@
 
 {% block body %}
 
-<form id="form1" method="post" action="/vistaEmpresas" class="form-horizontal" style="margin:0 auto"> <!-- novalidate-->
+<form id="form1" method="post" action="/vistaVendedores" class="form-horizontal" style="margin:0 auto"> <!-- novalidate-->
 	<div>
 		<div class="container-md">
 			<div class="table-responsive">
@@ -12,10 +12,10 @@
 					<div class="table-title">
 						<div class="row">
 							<div class="col-sm-6">
-								<h2> <b>Empresas</b></h2>
+								<h2> <b>Vendedores</b></h2>
 							</div>
 							<div class="col-sm-6">
-								<a href="#modalCrud" class="btn btn-outline-success" data-toggle="modal"><i class="material-icons">&#xE147;</i> <span>Gestión Empresas</span></a>				
+								<a href="#modalCrud" class="btn btn-outline-success" data-toggle="modal"><i class="material-icons">&#xE147;</i> <span>Gestión Vendedores</span></a>				
 							</div>
 						</div>
 					</div>
@@ -30,6 +30,11 @@
 								</th>
 								<th>Código</th>
 								<th>Nombre</th>
+								<th>Telefono</th> <!-- Fixed column name bug -->
+								<th>Email</th>
+								<th>Carnet</th>
+                                <th>Direccion</th>
+								<th>Actions</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -41,8 +46,12 @@
 										<label for="checkbox1"></label>
 									</span>
 								</td>
-								<td>{{ arregloEmpresas[i].getCodigo() }}</td>
-								<td>{{ arregloEmpresas[i].getNombre() }}</td>
+								<td>{{ arregloVendedores[i].getCodigo() }}</td>
+								<td>{{ arregloVendedores[i].getNombre() }}</td>
+								<td>{{ arregloVendedores[i].getTelefono() }}</td>
+								<td>{{ arregloVendedores[i].getEmail() }}</td>
+								<td>{{ arregloVendedores[i].getCarnet() }}</td>
+                                <td>{{ arregloVendedores[i].getDireccion() }}</td>
 								<td>
 									<!--<a href="#modalCrud" class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Modificar Usuario">&#xE254;</i></a>-->					
 									<a href="#borrarVariosModal" class="delete" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Borrar varios Usuarios">&#xE872;</i></a>
@@ -64,20 +73,20 @@
 									</select>
 								</form>
 							</li> 
-							
+							<!-- Fixed bug with pagination, replace the href vistaRoles for vistaVendedores -->
 							<li class="page-item {% if paginacion['paginaActiva']|int <= 1 %} disabled {% else %}  {% endif %}">
-								<a href="\vistaEmpresas?paginaActiva={{ paginacion['paginaActiva']|int -1 }}" class="page-link">Anterior</a>
+								<a href="\vistaVendedores?paginaActiva={{ paginacion['paginaActiva']|int -1 }}" class="page-link">Anterior</a>
 							</li>
 
 							{% for i in range(paginacion['numPaginas']) %}
 							<!--<li class="page-item active">-->
 							<li class="page-item {% if paginacion['paginaActiva']|int == i+1 %} active {% else %}  {% endif %} ">
-								<a href="\vistaEmpresas?paginaActiva={{ i+1 }}" class="page-link">{{ i+1 }}</a>
+								<a href="\vistaVendedores?paginaActiva={{ i+1 }}" class="page-link">{{ i+1 }}</a>
 							</li>
 							{% endfor %}
 
 							<li class="page-item {% if paginacion['paginaActiva']|int >= paginacion['numPaginas'] %} disabled {% else %}  {% endif %}">
-								<a href="\vistaEmpresas?paginaActiva={{ paginacion['paginaActiva']|int + 1 }}" class="page-link">Siguiente</a>
+								<a href="\vistaVendedores?paginaActiva={{ paginacion['paginaActiva']|int + 1 }}" class="page-link">Siguiente</a>
 							</li>
 						</ul>
 					</div>
@@ -91,14 +100,14 @@
 			<div class="modal-dialog">
 				<div class="modal-content">
 						<div class="modal-header">						
-							<h4 class="modal-title">Empresas</h4>
+							<h4 class="modal-title">Vendedores</h4>
 							<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 						</div>
 						<div class="modal-body">					
 							<div class="form-group">
 								<nav>
 								<div class="nav nav-tabs" id="nav-tab" role="tablist">
-									<button class="nav-link active" id="nav-home-tab" data-toggle="tab" data-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">Empresas</button>
+									<button class="nav-link active" id="nav-home-tab" data-toggle="tab" data-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">Vendedores</button>
 									<!--<button class="nav-link" id="nav-profile-tab" data-toggle="tab" data-target="#nav-profile" type="button" role="tab" aria-controls="nav-profile" aria-selected="false">Roles por Usuario</button>-->
 								</div>
 								</nav>
@@ -106,13 +115,28 @@
 								<div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
 										<div class="form-group">
 											<label>Código</label>
-											<input type="text" id="txtCodigo" name="txtCodigo" class="form-control"  value="{{ empresa['codigo'] }}">
+											<input type="text" id="txtCodigo" name="txtCodigo" class="form-control"  value="{{ vendedor['codigo'] }}">
 										</div>
 										<div class="form-group">
 											<label>Nombre</label>
-											<input type="text" id="txtNombre" name="txtNombre" class="form-control" value="{{ empresa['nombre'] }}">
+											<input type="text" id="txtNombre" name="txtNombre" class="form-control" value="{{ vendedor['nombre'] }}">
 										</div>
-										
+										<div class="form-group">
+											<label>Teléfono</label>
+											<input type="text" id="txtTelefono" name="txtTelefono" class="form-control" value="{{ vendedor['telefono'] }}">
+										</div>
+										<div class="form-group">
+											<label>Email</label>
+											<input type="text" id="txtEmail" name="txtEmail" class="form-control" value="{{ vendedor['email'] }}">
+										</div>
+										<div class="form-group">
+											<label>Carnet</label>
+											<input type="text" id="txtCarnet" name="txtCarnet" class="form-control" value="{{ vendedor['carnet'] }}">
+										</div>
+                                        <div class="form-group">
+											<label>Direccion</label>
+											<input type="text" id="txtDireccion" name="txtDireccion" class="form-control" value="{{ vendedor['direccion'] }}">
+										</div>
 										<div class="form-group">
 											<button id="btnGuardar" name="bt" value="Guardar" class="btn btn-success">Guardar</button>
 											<input type="submit" id="btnConsultar" name="bt" value="Consultar" class="btn btn-success"/>
