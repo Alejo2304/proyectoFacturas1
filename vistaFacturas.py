@@ -130,11 +130,11 @@ def vista_Facturas():
                 objControlFactura=ControlFactura(objFactura)
                 objControlFactura.consultar()
 
-                factura['numero'] = objFactura.getNumero()
-                factura['fecha'] = objFactura.getFecha()
-                factura['total'] = objFactura.getTotal()
-                factura['cliente'] = objFactura.getCliente()
-                factura['vendedor'] = objFactura.getVendedor()
+                factura['numero'] = objControlFactura.objFactura.getNumero()
+                factura['fecha'] = objControlFactura.objFactura.getFecha()
+                factura['total'] = objControlFactura.objFactura.getTotal()
+                factura['cliente'] = objControlFactura.objFactura.getCliente()
+                factura['vendedor'] = objControlFactura.objFactura.getVendedor()
 
                 return render_template('/vistaFacturas.html',ema=ema,arregloFacturas=arregloFacturas,factura=factura,paginacion=paginacion)
             except Exception as objException:
