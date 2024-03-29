@@ -111,12 +111,12 @@
                                 <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
                                         <div class="form-group">
                                             <label>Factura</label>
-									        <input type="text" id="txtFactura" name="txtFactura" class="form-control" value="{{ productosporfactura['factura'] }}">
-								        </div>
-								        <div class="form-group">
-									        <label>Producto</label>
-									        <input type="text" id="txtProducto" name="txtProducto" class="form-control" value="{{ productosporfactura['producto'] }}">
-                                        
+                                            <input type="text" id="txtFactura" name="txtFactura" class="form-control" value="{{ productosporfactura['factura'] }}" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Producto</label>
+                                            <input type="text" id="txtProducto" name="txtProducto" class="form-control" value="{{ productosporfactura['producto'] }}" required>
+                                        </div>
                                         <div class="form-group">
                                             <label>Cantidad</label>
                                             <input type="text" id="txtCantidad" name="txtCantidad" class="form-control" value="{{ productosporfactura['cantidad'] }}">
