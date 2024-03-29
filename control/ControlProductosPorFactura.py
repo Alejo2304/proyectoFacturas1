@@ -60,7 +60,7 @@ class ControlProductosPorFactura():
         try:
             objControlConexion = ControlConexion()
             msg = objControlConexion.abrirBd(usua, passw, serv, port, bdat)
-            comandoSql = "INSERT INTO productosporfactura(fknumfactura, fkcodproducto, cantidad, subtotal) VALUES ('{}', '{}', '{}', '{}');".format(fac, pro, can, sub)
+            comandoSql = "INSERT INTO productosporfactura(fknumfactura, fkcodproducto, cantidad, subtotal) VALUES ('{}', '{}', '{}', '{}')".format(fac, pro, can, sub)
             cursor = objControlConexion.ejecutarComandoSql(comandoSql)
             objControlConexion.cerrarBd()
 
@@ -71,8 +71,9 @@ class ControlProductosPorFactura():
             print(msg)
         return msg
      
-    def borrar(self): #pendiente por terminar
-        num = self.objProductosPorFactura.getNumero()
+    def borrar(self):
+        fac = self.objProductosPorFactura.getFactura()
+        pro = self.objProductosPorFactura.getProducto()
         try:
             objControlConexion = ControlConexion()
             msg = objControlConexion.abrirBd(usua, passw, serv, port, bdat)
@@ -80,7 +81,7 @@ class ControlProductosPorFactura():
             comandoSql = "BEGIN;"
             cursor = objControlConexion.ejecutarComandoSql(comandoSql)
 
-            comandoSql = "DELETE FROM factura WHERE factura.numero = '{}'".format(num)
+            comandoSql = "DELETE FROM prouctosporfactura WHERE fknumfactura = '{}' AND fkcodproducto = '{}'".format(fac, pro)
             cursor = objControlConexion.ejecutarComandoSql(comandoSql)
 
             comandoSql = "END;"
@@ -95,17 +96,16 @@ class ControlProductosPorFactura():
     
     def modificar(self):
 
-        num = self.objProductosPorFactura.getNumero()
-        fec = self.objProductosPorFactura.getFecha()
-        tot = self.objProductosPorFactura.getTotal()
-        cli = self.objProductosPorFactura.getCliente()
-        ven = self.objProductosPorFactura.getVendedor()
+        fac = self.objProductosPorFactura.getFactura()
+        pro = self.objProductosPorFactura.getProducto()
+        can = self.objProductosPorFactura.getCantidad()
+        sub = self.objProductosPorFactura.getSubtotal()
 
         try:
             objControlConexion = ControlConexion()
             msg = objControlConexion.abrirBd(usua, passw, serv, port, bdat)
 
-            comandoSql = "INSERT INTO factura(numero, fecha, total, fkidcliente, fkidvendedor) VALUES ('{}', '{}', '{}', '{}', '{}');".format(num, fec, tot, cli, ven)
+            comandoSql = "INSERT INTO productosporfactura(fknumfactura, fkcodproducto, cantidad, subtotal) VALUES ('{}', '{}', '{}', '{}') ON CONFLICT (fknumfactura, fkcodproducto) DO UPDATE SET cantidad = '{}', subtotal = '{}';".format(fac, pro, can, sub, can, sub)
             cursor = objControlConexion.ejecutarComandoSql(comandoSql)
 
             if cursor.rowcount > 0:
