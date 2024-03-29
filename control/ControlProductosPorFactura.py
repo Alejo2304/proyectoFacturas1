@@ -31,8 +31,9 @@ class ControlProductosPorFactura():
     
     def consultar(self):
         msg = "ok"
-        num = self.objProductosPorFactura.getNumero()
-        comandoSql = "SELECT * FROM factura WHERE factura.numero = '{}'".format(num)
+        fac = self.objProductosPorFactura.getFactura()
+        pro = self.objProductosPorFactura.getProducto()
+        comandoSql = "SELECT * FROM productosporfactura WHERE fknumfactura = '{}' AND fkcodproducto = '{}'".format(fac, pro)
         objControlConexion = ControlConexion()
         msg = objControlConexion.abrirBd(usua, passw, serv, port, bdat)
         cursor = objControlConexion.ejecutarComandoSql(comandoSql)

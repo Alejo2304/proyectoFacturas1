@@ -14,6 +14,8 @@ from modelo.Producto import *
 from control.ControlProducto import *
 from modelo.Factura import *
 from control.ControlFactura import *
+from modelo.ProductosPorFactura import *
+from control.ControlProductosPorFactura import *
 
 from menu import menu
 from vistaUsuarios import vistaUsuarios
@@ -23,6 +25,7 @@ from vistaEmpresas import vistaEmpresas
 from vistaVendedores import vistaVendedores
 from vistaProductos import vistaProductos
 from vistaFacturas import vistaFacturas 
+from vistaProductosPorFactura import vistaProductosPorFactura
 
 
 app = Flask(__name__)
@@ -34,6 +37,7 @@ app.register_blueprint(vistaEmpresas)
 app.register_blueprint(vistaVendedores)
 app.register_blueprint(vistaProductos)
 app.register_blueprint(vistaFacturas)
+app.register_blueprint(vistaProductosPorFactura)
 
 app.secret_key='secret_key'
 

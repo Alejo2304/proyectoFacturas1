@@ -1,4 +1,5 @@
 from modelo.Persona import Persona
+#DE modelo.Persona IMPORTAR LA CLASE PERSONA
 class Cliente(Persona):
     def __init__(self,credito=None):
         self.credito=credito

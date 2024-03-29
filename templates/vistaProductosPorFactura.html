@@ -4,7 +4,7 @@
 
 {% block body %}
 
-<form id="form1" method="post" action="/vistaFacturas" class="form-horizontal" style="margin:0 auto"> <!-- novalidate-->
+<form id="form1" method="post" action="/vistaProductosPorFactura" class="form-horizontal" style="margin:0 auto"> <!-- novalidate-->
     <div>
         <div class="container-md">
             <div class="table-responsive">
@@ -12,10 +12,10 @@
                     <div class="table-title">
                         <div class="row">
                             <div class="col-sm-6">
-                                <h2> <b>Facturas</b></h2>
+                                <h2> <b>Productos por Factura</b></h2>
                             </div>
                             <div class="col-sm-6">
-                                <a href="#modalCrud" class="btn btn-outline-success" data-toggle="modal"><i class="material-icons">&#xE147;</i> <span>Gestión Facturas</span></a>				
+                                <a href="#modalCrud" class="btn btn-outline-success" data-toggle="modal"><i class="material-icons">&#xE147;</i> <span>Gestión Productos por Facturas</span></a>				
                             </div>
                         </div>
                     </div>
@@ -28,14 +28,14 @@
                                         <label for="selectAll"></label>
                                     </span>
                                 </th>
-                                <th>Numero</th>
-                                <th>Fecha</th>
-                                <th>Total</th>
-                                <th>Cliente</th>
-                                <th>Vendedor</th>
+                                <th>Factura</th>
+                                <th>Producto</th>
+                                <th>Cantidad</th>
+                                <th>Subtotal</th>
                             </tr>
                         </thead>
                         <tbody>
+                            
                             {% for i in paginacion['rango'] %}
                             <tr>
                                 <td>
@@ -44,11 +44,11 @@
                                         <label for="checkbox1"></label>
                                     </span>
                                 </td>
-                                <td>{{ arregloFacturas[i].getNumero() }}</td>
-                                <td>{{ arregloFacturas[i].getFecha() }}</td>
-                                <td>{{ arregloFacturas[i].getTotal() }}</td>
-                                <td>{{ arregloFacturas[i].getCliente() }}</td>
-                                <td>{{ arregloFacturas[i].getVendedor() }}</td>
+                                <td>{{ arregloFacturas[i].getFactura() }}</td>
+                                <td>{{ arregloFacturas[i].getProducto() }}</td>
+                                <td>{{ arregloFacturas[i].getCantidad() }}</td>
+                                <td>{{ arregloFacturas[i].getSubtotal() }}</td>
+
                                 <td>
                                     <!--<a href="#modalCrud" class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Modificar Usuario">&#xE254;</i></a>-->					
 									<a href="#borrarVariosModal" class="delete" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Borrar varios Usuarios">&#xE872;</i></a>
@@ -71,17 +71,17 @@
 								</form>
 							</li> 
                             <li class="page-item {% if paginacion['paginaActiva']|int <= 1 %} disabled {% else %}  {% endif %}">
-                                <a href="\vistaFacturas?paginaActiva={{ paginacion['paginaActiva']|int -1 }}" class="page-link">Anterior</a>
+                                <a href="\vistaProductosPorFactura?paginaActiva={{ paginacion['paginaActiva']|int -1 }}" class="page-link">Anterior</a>
                             </li>
 
                             {% for i in range(paginacion['numPaginas']) %}
                             <li class="page-item {% if paginacion['paginaActiva']|int == i+1 %} active {% else %}  {% endif %} ">
-                                <a href="\vistaFacturas?paginaActiva={{ i+1 }}" class="page-link">{{ i+1 }}</a>
+                                <a href="\vistaProductosPorFactura?paginaActiva={{ i+1 }}" class="page-link">{{ i+1 }}</a>
                             </li>
 
                             {% endfor %}
                             <li class="page-item {% if paginacion['paginaActiva']|int >= paginacion['numPaginas'] %} disabled {% else %}  {% endif %}">
-                                <a href="\vistaFacturas?paginaActiva={{ paginacion['paginaActiva']|int + 1 }}" class="page-link">Siguiente</a>
+                                <a href="\vistaProductosPorFactura?paginaActiva={{ paginacion['paginaActiva']|int + 1 }}" class="page-link">Siguiente</a>
                             </li>
                         </ul>
                     </div>
@@ -96,38 +96,34 @@
             <div class="modal-dialog">
                 <div class="modal-content">
                         <div class="modal-header">
-                            <h4 class="modal-title">Gestión de Facturas</h4>
+                            <h4 class="modal-title">Gestión de Productos por Factura</h4>
                             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                         </div>
                         <div class="modal-body">					
                             <div class="form-group">
                                 <nav>
                                 <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                                    <button class="nav-link active" id="nav-home-tab" data-toggle="tab" data-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">Productos</button>
+                                    <button class="nav-link active" id="nav-home-tab" data-toggle="tab" data-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">Productos por Factura</button>
                                     <!--<button class="nav-link" id="nav-profile-tab" data-toggle="tab" data-target="#nav-profile" type="button" role="tab" aria-controls="nav-profile" aria-selected="false">Roles por Usuario</button>-->
                                 </div>
                                 </nav>
                                 <div class="tab-content" id="nav-tabContent">
                                 <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
                                         <div class="form-group">
-                                            <label>Numero</label>
-									        <input type="text" id="txtNumero" name="txtNumero" class="form-control" value="{{ factura['numero'] }}">
+                                            <label>Factura</label>
+									        <input type="text" id="txtFactura" name="txtFactura" class="form-control" value="{{ productosporfactura['factura'] }}">
 								        </div>
 								        <div class="form-group">
-									        <label>Fecha</label>
-									        <input type="text" id="txtFecha" name="txtFecha" class="form-control" value="{{ factura['fecha'] }}">
+									        <label>Producto</label>
+									        <input type="text" id="txtProducto" name="txtProducto" class="form-control" value="{{ productosporfactura['producto'] }}">
                                         
                                         <div class="form-group">
-                                            <label>Total</label>
-                                            <input type="text" id="txtTotal" name="txtTotal" class="form-control" value="{{ factura['total'] }}">
+                                            <label>Cantidad</label>
+                                            <input type="text" id="txtCantidad" name="txtCantidad" class="form-control" value="{{ productosporfactura['cantidad'] }}">
                                         </div>
                                         <div class="form-group">
-                                            <label>Cliente</label>
-                                            <input type="text" id="txtCliente" name="txtCliente" class="form-control" value="{{ factura['cliente'] }}">
-                                        </div>
-                                        <div class="form-group">
-                                            <label>Vendedor</label>
-                                            <input type="text" id="txtVendedor" name="txtVendedor" class="form-control" value="{{ factura['vendedor'] }}">
+                                            <label>Subtotal</label>
+                                            <input type="text" id="txtSubtotal" name="txtSubtotal" class="form-control" value="{{ productosporfactura['subtotal'] }}">
                                         </div>
                                         <div class="form-group">
 											<button id="btnGuardar" name="bt" value="Guardar" class="btn btn-success">Guardar</button>
