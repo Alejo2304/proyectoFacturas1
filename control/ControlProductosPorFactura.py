@@ -81,7 +81,7 @@ class ControlProductosPorFactura():
             comandoSql = "BEGIN;"
             cursor = objControlConexion.ejecutarComandoSql(comandoSql)
 
-            comandoSql = "DELETE FROM prouctosporfactura WHERE fknumfactura = '{}' AND fkcodproducto = '{}'".format(fac, pro)
+            comandoSql = "DELETE FROM productosporfactura WHERE fknumfactura = '{}' AND fkcodproducto = '{}'".format(fac, pro)
             cursor = objControlConexion.ejecutarComandoSql(comandoSql)
 
             comandoSql = "END;"
@@ -103,9 +103,21 @@ class ControlProductosPorFactura():
         
         try:
             objControlConexion = ControlConexion()
+
             msg = objControlConexion.abrirBd(usua, passw, serv, port, bdat)
-            comandoSql = "UPDATE productosporfactura SET cantidad = '{}', subtotal = '{}' WHERE fknumfactura = '{}' AND fkcodproducto = '{}';".format(can, sub, fac, pro)            
+            
+            comandoSql = "BEGIN;"
             cursor = objControlConexion.ejecutarComandoSql(comandoSql)
+
+            comandoSql = "DELETE FROM productosporfactura WHERE fknumfactura = '{}' AND fkcodproducto = '{}'".format(fac, pro)
+            cursor = objControlConexion.ejecutarComandoSql(comandoSql)
+
+            comandoSql = "INSERT INTO productosporfactura(fknumfactura, fkcodproducto, cantidad, subtotal) VALUES ('{}', '{}', '{}', '{}')".format(fac, pro, can, sub)
+            cursor = objControlConexion.ejecutarComandoSql(comandoSql)
+
+            comandoSql = "END;"
+            cursor = objControlConexion.ejecutarComandoSql(comandoSql)
+
 
             if cursor.rowcount > 0:
                 msg = objControlConexion.cerrarBd()

@@ -147,7 +147,6 @@ def vista_ProductosPorFactura():
             return redirect('/vistaProductosPorFactura')
         
         elif bt== 'Borrar':
-            pass
             try:
                 objFactura=ProductosPorFactura(fac,pro,can,sub)
                 objControlFactura=ControlProductosPorFactura(objFactura)
