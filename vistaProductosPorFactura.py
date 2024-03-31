@@ -138,7 +138,6 @@ def vista_ProductosPorFactura():
             return redirect('/vistaProductosPorFactura')
         
         elif bt== 'Modificar':
-            pass
             try:
                 objFactura=ProductosPorFactura(fac,pro,can,sub)
                 objControlFactura=ControlProductosPorFactura(objFactura)

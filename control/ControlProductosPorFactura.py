@@ -100,12 +100,11 @@ class ControlProductosPorFactura():
         pro = self.objProductosPorFactura.getProducto()
         can = self.objProductosPorFactura.getCantidad()
         sub = self.objProductosPorFactura.getSubtotal()
-
+        
         try:
             objControlConexion = ControlConexion()
             msg = objControlConexion.abrirBd(usua, passw, serv, port, bdat)
-
-            comandoSql = "INSERT INTO productosporfactura(fknumfactura, fkcodproducto, cantidad, subtotal) VALUES ('{}', '{}', '{}', '{}') ON CONFLICT (fknumfactura, fkcodproducto) DO UPDATE SET cantidad = '{}', subtotal = '{}';".format(fac, pro, can, sub, can, sub)
+            comandoSql = "UPDATE productosporfactura SET cantidad = '{}', subtotal = '{}' WHERE fknumfactura = '{}' AND fkcodproducto = '{}';".format(can, sub, fac, pro)            
             cursor = objControlConexion.ejecutarComandoSql(comandoSql)
 
             if cursor.rowcount > 0:
