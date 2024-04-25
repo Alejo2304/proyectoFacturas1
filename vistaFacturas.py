@@ -1,4 +1,5 @@
 from flask import Blueprint,render_template,session,redirect,request
+from datetime import datetime
 import markupsafe
 import math
 
@@ -98,9 +99,9 @@ def vista_Facturas():
         ven=markupsafe.escape(request.form['txtVendedor'])
         paginacion['itemsxpagina'] = markupsafe.escape(request.form.get('combo2'))
 
+
         btnMsg = markupsafe.escape(request.form.get('btnMsg'))
         cheks = request.form.getlist('options[]')
-
 
         factura = {
         'numero': num,
@@ -109,6 +110,7 @@ def vista_Facturas():
         'cliente':cli,
         'vendedor':ven
         }
+
 
         if request.form.get('combo2') != paginacion['itemsxpagina']:
             updatePagination(arregloFacturas)
@@ -120,6 +122,7 @@ def vista_Facturas():
                 objFactura=Factura(num,fec,tot,cli,ven)
                 objControlFactura=ControlFactura(objFactura)
                 objControlFactura.guardar()
+                print(fac)
             except Exception as objException:
                 msg="Algo salió mal: {}".format(objException)
             return redirect('/vistaFacturas')	
@@ -135,6 +138,9 @@ def vista_Facturas():
                 factura['total'] = objControlFactura.objFactura.getTotal()
                 factura['cliente'] = objControlFactura.objFactura.getCliente()
                 factura['vendedor'] = objControlFactura.objFactura.getVendedor()
+                
+                #This line convert the date to a string
+                factura['fecha'] = factura['fecha'].strftime("%Y-%m-%d")
 
                 return render_template('/vistaFacturas.html',ema=ema,arregloFacturas=arregloFacturas,factura=factura,paginacion=paginacion)
             except Exception as objException:

@@ -59,4 +59,34 @@ function actualizarValorSeleccionado(combo,txtOculto) {
 	document.getElementById(txtOculto).value = valorSeleccionado;
   }
 
+function enableNumero() {
+	document.getElementById("txtNumero").disabled = false;
+	document.getElementById("txtNumero").focus();
+  }
+
+function disableNumero() {
+document.getElementById("txtNumero").disabled = true;
+document.getElementById("txtNumero").value = "";
+}
+
+function disableTotal() {
+	document.getElementById("txtTotal").disabled = true;
+	document.getElementById("txtTotal").value = "";
+}
+
+function disableFecha() {
+	document.getElementById("txtFecha").disabled = true;
+	document.getElementById("txtFecha").value = "";
+}
+
+function disableCliente() {
+	document.getElementById("txtCliente").disabled = true;
+	document.getElementById("txtCliente").value = "";
+}
+
+function disableVendedor() {
+	document.getElementById("txtVendedor").disabled = true;
+	document.getElementById("txtVendedor").value = "";
+}
+
 

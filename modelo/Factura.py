@@ -11,6 +11,13 @@ class Factura(object):
     def setNumero(self, numero):
         self.numero = numero
 
+    """
+    The following SQL comand was used to change the data type of the column fecha from time to timestamp on the DATABASE
+        ALTER TABLE factura 
+        ALTER COLUMN fecha 
+        TYPE timestamp 
+        USING '2024-04-18';
+    """
     def getFecha(self):
         return self.fecha
     def setFecha(self, fecha):

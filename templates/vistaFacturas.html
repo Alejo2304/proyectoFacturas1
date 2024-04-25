@@ -1,6 +1,6 @@
 <!--https://www.tutorialrepublic.com/snippets/preview.php?topic=bootstrap&file=crud-data-table-for-database-with-modal-form-->
 {% extends'./base.html' %}
-{% block title%} Roles {% endblock %}
+{% block title%} Facturas {% endblock %}
 
 {% block body %}
 
@@ -103,18 +103,20 @@
                             <div class="form-group">
                                 <nav>
                                 <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                                    <button class="nav-link active" id="nav-home-tab" data-toggle="tab" data-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">Productos</button>
-                                    <!--<button class="nav-link" id="nav-profile-tab" data-toggle="tab" data-target="#nav-profile" type="button" role="tab" aria-controls="nav-profile" aria-selected="false">Roles por Usuario</button>-->
+                                    <button class="nav-link active" id="nav-home-tab" data-toggle="tab" data-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">Facturas</button>
+                                    <button class="nav-link" id="nav-profile-tab" data-toggle="tab" data-target="#nav-profile" type="button" role="tab" aria-controls="nav-profile" aria-selected="false">Productos</button>
                                 </div>
                                 </nav>
+
+
                                 <div class="tab-content" id="nav-tabContent">
+				
                                 <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
-                                        <!--This numero should be disabled for insert into and save, type text-->
-										<!--However this must allow the text for the consultar-->
 										<div class="form-group">
-                                            <label>Numero</label>
-									        <input type="text" id="txtNumero" name="txtNumero" class="form-control" value="{{ factura['numero'] }}">
-								        </div>
+											<label>Numero</label>
+											<input type="text" id="txtNumero" name="txtNumero" class="form-control" value="{{ factura['numero'] }}" disabled>
+											<input type="hidden" name="txtNumero" value="{{ factura['numero'] }}"><!--This is to send the value to the controller-->
+										</div>
 										<!--Arreglar el input de fecha a tipo date para corregir los datos-->
 								        <!-- It is needed to fix the format of the date so it matches postgres-->
 										<div class="form-group">
@@ -123,7 +125,8 @@
                                         <!--The total on the table must be inactive because it should be calculated by the DB or code.-->
                                         <div class="form-group">
                                             <label>Total</label>
-                                            <input type="text" id="txtTotal" name="txtTotal" class="form-control" value="{{ factura['total'] }}">
+                                            <input type="text" id="txtTotal" name="txtTotal" class="form-control" value="{{ factura['total'] }}" disabled>
+											<input type="hidden" name="txtTotal" value="{{ factura['total'] }}"> <!--This is to send the value to the controller-->
                                         </div>
 
 										<!--This Cliente must be a drop menu instead of a text input-->
@@ -137,15 +140,17 @@
                                             <input type="text" id="txtVendedor" name="txtVendedor" class="form-control" value="{{ factura['vendedor'] }}">
                                         </div>
                                         <div class="form-group">
-											<button id="btnGuardar" name="bt" value="Guardar" class="btn btn-success">Guardar</button>
-											<input type="submit" id="btnConsultar" name="bt" value="Consultar" class="btn btn-success"/>
+											<button id="btnGuardar" name="bt" value="Guardar" class="btn btn-success" onmouseover="disableNumero(); disableTotal()">Guardar</button>
+											<input type="submit" id="btnConsultar" name="bt" value="Consultar" class="btn btn-success" onmouseover="enableNumero()"/>
 
-											<a href="#modificarModal" class="btn btn-danger" data-toggle="modal"><span>Modificar</span></a>	
-											<a href="#borrarModal" class="btn btn-danger" data-toggle="modal"><span>Borrar</span></a>
+											<a href="#modificarModal" class="btn btn-danger" onmouseover="enableNumero(); disableTotal()" data-toggle="modal"><span>Modificar</span></a>	
+											<a href="#borrarModal" class="btn btn-danger" onmouseover="enableNumero(); disableTotal()" data-toggle="modal"><span>Borrar</span></a>
 										</div>	
 								</div>
 								<div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
 								</div>
+
+								
 							</div>
 							</div>	
 						</div>

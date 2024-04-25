@@ -46,23 +46,23 @@ class ControlFactura():
                     self.objFactura.setTotal(fila[2])
                     self.objFactura.setCliente(fila[3])
                     self.objFactura.setVendedor(fila[4])
-            objControlConexion.cerrarBd()
+            
         except Exception as objException:
             msg = "Algo salió mal: {}".format(objException)
             print(msg)
+
+        objControlConexion.cerrarBd()
         return self.objFactura
     
     def guardar(self):
         msg = "ok"
-        num = self.objFactura.getNumero()
         fec = self.objFactura.getFecha()
-        tot = self.objFactura.getTotal()
         cli = self.objFactura.getCliente()
         ven = self.objFactura.getVendedor()
         try:
             objControlConexion = ControlConexion()
             msg = objControlConexion.abrirBd(usua, passw, serv, port, bdat)
-            comandoSql = "INSERT INTO factura(numero, fecha, total, fkidcliente, fkidvendedor) VALUES ('{}', '{}', '{}', '{}', '{}');".format(num, fec, tot, cli, ven)
+            comandoSql = "INSERT INTO factura(fecha,fkidcliente, fkidvendedor) VALUES ('{}', '{}', '{}');".format(fec,cli, ven)
             cursor = objControlConexion.ejecutarComandoSql(comandoSql)
             objControlConexion.cerrarBd()
 
@@ -99,7 +99,6 @@ class ControlFactura():
 
         num = self.objFactura.getNumero()
         fec = self.objFactura.getFecha()
-        tot = self.objFactura.getTotal()
         cli = self.objFactura.getCliente()
         ven = self.objFactura.getVendedor()
 
@@ -107,7 +106,7 @@ class ControlFactura():
             objControlConexion = ControlConexion()
             msg = objControlConexion.abrirBd(usua, passw, serv, port, bdat)
 
-            comandoSql = "INSERT INTO factura(numero, fecha, total, fkidcliente, fkidvendedor) VALUES ('{}', '{}', '{}', '{}', '{}');".format(num, fec, tot, cli, ven)
+            comandoSql = "UPDATE factura SET fecha='{}', fkidcliente='{}', fkidvendedor='{}' WHERE factura.numero='{}';".format(fec,cli,ven,num)
             cursor = objControlConexion.ejecutarComandoSql(comandoSql)
 
             if cursor.rowcount > 0:
