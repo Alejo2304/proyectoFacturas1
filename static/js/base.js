@@ -90,3 +90,9 @@ function disableVendedor() {
 }
 
 
+function actualizarSubtotal(){
+	var valorUnitario = document.getElementById("txtValorUnitario").value;
+	var cantidad = document.getElementById("txtCantidad").value;
+	var subtotal = cantidad * valorUnitario;
+	document.getElementById("txtSubtotal").value = subtotal;
+}

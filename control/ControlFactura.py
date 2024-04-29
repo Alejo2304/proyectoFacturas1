@@ -106,7 +106,7 @@ class ControlFactura():
             objControlConexion = ControlConexion()
             msg = objControlConexion.abrirBd(usua, passw, serv, port, bdat)
 
-            comandoSql = "UPDATE factura SET fecha='{}', fkidcliente='{}', fkidvendedor='{}' WHERE factura.numero='{}';".format(fec,cli,ven,num)
+            comandoSql = "UPDATE factura SET fecha='{}', fkidcliente='{}', fkidvendedor='{}' WHERE factura.numero='{}'8;".format(fec,cli,ven,num)
             cursor = objControlConexion.ejecutarComandoSql(comandoSql)
 
             if cursor.rowcount > 0:

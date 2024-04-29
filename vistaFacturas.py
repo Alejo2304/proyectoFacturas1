@@ -8,9 +8,7 @@ from control.ControlFactura import ControlFactura
 
 
 
-
 vistaFacturas=Blueprint("vistaFacturas",__name__,static_folder="static",template_folder="templates")
-
 @vistaFacturas.route("/vistaFacturas",methods = ['GET', 'POST'])
 
 @vistaFacturas.route('/submit', methods=['POST'])
@@ -28,12 +26,21 @@ def vista_Facturas():
     """
     
     arregloFacturas=[]
+    arregloProductosPorFactura=[]
+
     factura = {
     'numero': '',
     'fecha': '',
     'total':'',
     'cliente':'',
     'vendedor':''
+    }
+    productosPorFactura = {
+    'id': '',
+    'producto':'',
+    'valorUnitario':'',
+    'cantidad':'',
+    'subtotal':''
     }
     
     if 'ema' in session:

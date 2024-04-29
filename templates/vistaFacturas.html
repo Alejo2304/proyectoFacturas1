@@ -104,50 +104,103 @@
                                 <nav>
                                 <div class="nav nav-tabs" id="nav-tab" role="tablist">
                                     <button class="nav-link active" id="nav-home-tab" data-toggle="tab" data-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">Facturas</button>
-                                    <button class="nav-link" id="nav-profile-tab" data-toggle="tab" data-target="#nav-profile" type="button" role="tab" aria-controls="nav-profile" aria-selected="false">Productos</button>
+                                    <button class="nav-link" id="nav-profile-tab" data-toggle="tab" data-target="#nav-profile" type="button" role="tab" aria-controls="nav-profile" aria-selected="false">ProductosPorFactura</button>
                                 </div>
                                 </nav>
 
 
                                 <div class="tab-content" id="nav-tabContent">
 				
-                                <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+									<div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
 										<div class="form-group">
 											<label>Numero</label>
 											<input type="text" id="txtNumero" name="txtNumero" class="form-control" value="{{ factura['numero'] }}" disabled>
 											<input type="hidden" name="txtNumero" value="{{ factura['numero'] }}"><!--This is to send the value to the controller-->
 										</div>
 										<!--Arreglar el input de fecha a tipo date para corregir los datos-->
-								        <!-- It is needed to fix the format of the date so it matches postgres-->
+										<!-- It is needed to fix the format of the date so it matches postgres-->
 										<div class="form-group">
-									        <label>Fecha</label>
-									        <input type="date" id="txtFecha" name="txtFecha" class="form-control" value="{{ factura['fecha'] }}">
-                                        <!--The total on the table must be inactive because it should be calculated by the DB or code.-->
-                                        <div class="form-group">
-                                            <label>Total</label>
-                                            <input type="text" id="txtTotal" name="txtTotal" class="form-control" value="{{ factura['total'] }}" disabled>
+											<label>Fecha</label>
+											<input type="date" id="txtFecha" name="txtFecha" class="form-control" value="{{ factura['fecha'] }}">
+										<!--The total on the table must be inactive because it should be calculated by the DB or code.-->
+										</div>
+										
+										<div class="form-group">
+											<label>Total</label>
+											<input type="text" id="txtTotal" name="txtTotal" class="form-control" value="{{ factura['total'] }}" disabled>
 											<input type="hidden" name="txtTotal" value="{{ factura['total'] }}"> <!--This is to send the value to the controller-->
-                                        </div>
+										</div>
 
 										<!--This Cliente must be a drop menu instead of a text input-->
-                                        <div class="form-group">
-                                            <label>Cliente</label>
-                                            <input type="text" id="txtCliente" name="txtCliente" class="form-control" value="{{ factura['cliente'] }}">
-                                        </div>
+										<div class="form-group">
+											<label>Cliente</label>
+											<input type="text" id="txtCliente" name="txtCliente" class="form-control" value="{{ factura['cliente'] }}">
+										</div>
+
 										<!--This Vendedor must be a drop menu instead of a text input-->
-                                        <div class="form-group">
-                                            <label>Vendedor</label>
-                                            <input type="text" id="txtVendedor" name="txtVendedor" class="form-control" value="{{ factura['vendedor'] }}">
-                                        </div>
-                                        <div class="form-group">
+										<div class="form-group">
+											<label>Vendedor</label>
+											<input type="text" id="txtVendedor" name="txtVendedor" class="form-control" value="{{ factura['vendedor'] }}">
+										</div>
+
+										<div class="form-group">
 											<button id="btnGuardar" name="bt" value="Guardar" class="btn btn-success" onmouseover="disableNumero(); disableTotal()">Guardar</button>
 											<input type="submit" id="btnConsultar" name="bt" value="Consultar" class="btn btn-success" onmouseover="enableNumero()"/>
 
 											<a href="#modificarModal" class="btn btn-danger" onmouseover="enableNumero(); disableTotal()" data-toggle="modal"><span>Modificar</span></a>	
 											<a href="#borrarModal" class="btn btn-danger" onmouseover="enableNumero(); disableTotal()" data-toggle="modal"><span>Borrar</span></a>
 										</div>	
-								</div>
-								<div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
+									</div>
+									
+									<div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
+										<div class="container">
+											<div class="row">
+											  <div class="col-12">
+												<table class="table table-bordered">
+												  <thead>
+													<tr>
+													  <th scope="col">Producto</th>
+													  <th scope="col">Valor Unitario</th>
+													  <th scope="col">Cantidad</th>
+													  <th scope="col">Subtotal</th>
+													  <th scope="col">Acciones</th>
+
+													</tr>
+												  </thead>
+												  <tbody>
+													<tr>
+													  <th scope="row">
+														<select name="Productos" id="">
+															<option value="1">Producto 1</option>
+															<option value="2">Producto 2</option>
+															<option value="3">Producto 3</option>
+															<option value="4">Producto 4</option>
+															<option value="5">Producto 5</option>
+														</select>
+
+													  </th>
+													  <td>
+														<input type="text" name="valorUnitario" id="txtValorUnitario" value="5000"  disabled style="border: none;">
+													  </td>
+													  <td>
+														<input type="number" name="cantidad" id="txtCantidad" min="1" max="100" value="1" oninput="actualizarSubtotal()">
+													  </td>
+													  <td>
+														<input type="text" name="valorUnitario" id="txtSubtotal" value="5000"  disabled style="border: none;">
+													  </td>
+													  <td>
+														<button type="button" class="btn btn-primary"><i class="far fa-eye">+</i></button>
+													  </td>
+													</tr>
+													<td>
+														
+													  </td>
+												  </tbody>
+												</table>
+											  </div>
+											</div>
+										  </div>
+									</div>
 								</div>
 
 								

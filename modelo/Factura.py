@@ -16,7 +16,7 @@ class Factura(object):
         ALTER TABLE factura 
         ALTER COLUMN fecha 
         TYPE timestamp 
-        USING '2024-04-18';
+        USING '2024-04-18';5
     """
     def getFecha(self):
         return self.fecha
