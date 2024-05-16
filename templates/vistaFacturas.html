@@ -189,7 +189,7 @@
 															<option selected disabled>Seleccione el producto.</option>
 															{% for producto in arregloProductos %}
 															<option value="{{producto.getCodigo()}}" data-valorunitario="{{producto.getValorUnitario()}}">
-																{{ producto.getCodigo() ~ ' - ' ~producto.getNombre() }}
+																{{ producto.getCodigo() }}
 															</option>
 															{% endfor %}
 														</select>

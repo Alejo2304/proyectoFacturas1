@@ -29,13 +29,13 @@ $(document).ready(function(){
 	 	
 });
 
-//This function update the value of txtProducto on vistaFactura.html
+//This function update the value of txtValorUnitario on vistaFactura.html
 $(document).ready(function(){
-	$("#txtProductos").change(function(){
-	  var selectedValue = $('option:selected', this).data('valorunitario');
-	  $("#txtValorUnitario").val(selectedValue);
-	});
-  });
+    $(document).on('change', '#txtProductos', function(){
+        var selectedValue = $('option:selected', this).data('valorunitario');
+        $(this).closest('tr').find("#txtValorUnitario").val(selectedValue);
+    });
+});
 
 function agregarItem(IDdesde, IDhasta){
     var option = document.createElement("option");
@@ -105,31 +105,93 @@ function actualizarSubtotal(){
 }
 
 function getOptionValues() {
-	// Get the select element as a whole
+    // Get the select element as a whole
     let selectElement = document.getElementById('txtProductos');
-	// Get the selected option
-	let selectedOption = selectElement.value;
-	
-	// Get the options as an array
-    let optionValues = Array.from(selectElement.options).map(option => option.value);
-	
-	// Remove the first option of the Array
-	optionValues.shift();
-
-	// Remove the selected option from the Array
-    optionValues = optionValues.filter(option => option !== selectedOption);
-	return optionValues;
+    if (selectElement === null) {
+        console.error('selectElement is null');
+        return [];
+    }
+    // Get the selected option
+    let selectedOption = selectElement.value;
+    
+    // Get the options as an array of objects
+	let optionValues = Array.from(selectElement.options)
+		.filter(option => !option.disabled)
+		.map(option => ({
+			value: option.value,
+			valorunitario: option.dataset.valorunitario
+		}));
+    // Remove the selected option from the Array
+    optionValues = optionValues.filter(option => option.value !== selectedOption);
+    console.log(optionValues);
+    return optionValues;
 }
 
+/**
+ * Adds a new row to the specified table.
+ * 
+ * @param {string} tableID - The ID of the table to add the row to.
+ */
 function addRow(tableID) {
-	var table = document.getElementById(tableID);
 	
+	var table = document.getElementById(tableID);
 	var rowCount = table.rows.length;
 	var row = table.insertRow(rowCount);
 	var colCount = table.rows[0].cells.length;
+	var optionValues = getOptionValues();
 
-	for(var i=0; i<colCount; i++) {
-		var newcell = row.insertCell(i);
-		newcell.innerHTML = table.rows[1].cells[i].innerHTML;
+	selectElement = document.getElementById('txtProductos');
+	selectElement.id = "txtProductos" + (rowCount-1);
+	selectElement.name = "txtProductos" + (rowCount-1);
+
+	selectElement = document.getElementById('txtValorUnitario');
+	selectElement.id = "txtValorUnitario" + (rowCount-1);
+	selectElement.name = "txtValorUnitario" + (rowCount-1);
+
+	selectElement = document.getElementById('txtCantidad');
+	selectElement.id = "txtCantidad" + (rowCount-1);
+	selectElement.name = "txtCantidad" + (rowCount-1);
+
+	selectElement = document.getElementById('txtSubtotal');
+	selectElement.id = "txtSubtotal" + (rowCount-1);
+	selectElement.name = "txtSubtotal" + (rowCount-1);
+
+	// Create a new select element
+	var select = document.createElement("select");
+	select.id = "txtProductos";
+	select.name = "txtProductos";
+
+	// Add options to the select element
+	optionValues.forEach(function(optionValue) {
+		var option = document.createElement("option");
+		option.value = optionValue.value;
+		option.text = optionValue.value;
+		option.dataset.valorunitario = optionValue.valorunitario; 
+		select.appendChild(option);
+	});
+
+	defaultOption = document.createElement("option");
+	defaultOption.text = "Seleccione el producto.";
+	defaultOption.selected = true;
+	defaultOption.disabled = true;
+	select.appendChild(defaultOption);
+	
+
+	// Add the select element to the new row
+	var newCell = row.insertCell(0);
+	newCell.appendChild(select);
+
+	// Add the remaining cells to the new row
+	for(var i = 1; i < colCount; i++) {
+		var newCell = row.insertCell(i);
+		newCell.innerHTML = table.rows[1].cells[i].innerHTML;
+		var childElements = newCell.children;
+		for(var j = 0; j < childElements.length; j++) {
+			if (childElements[j].id) {
+				var oldId = childElements[j].id;
+				var newId = oldId.replace(/\d+$/, '');
+				childElements[j].id = newId;
+			}
+		}
 	}
 }
