@@ -29,6 +29,13 @@ $(document).ready(function(){
 	 	
 });
 
+//This function update the value of txtProducto on vistaFactura.html
+$(document).ready(function(){
+	$("#txtProductos").change(function(){
+	  var selectedValue = $('option:selected', this).data('valorunitario');
+	  $("#txtValorUnitario").val(selectedValue);
+	});
+  });
 
 function agregarItem(IDdesde, IDhasta){
     var option = document.createElement("option");
@@ -65,18 +72,18 @@ function enableNumero() {
   }
 
 function disableNumero() {
-document.getElementById("txtNumero").disabled = true;
-document.getElementById("txtNumero").value = "";
+	document.getElementById("txtNumero").disabled = true;
+	//document.getElementById("txtNumero").value = 0;
 }
 
 function disableTotal() {
 	document.getElementById("txtTotal").disabled = true;
-	document.getElementById("txtTotal").value = "";
+	//document.getElementById("txtTotal").value = "NULL";
 }
 
 function disableFecha() {
 	document.getElementById("txtFecha").disabled = true;
-	document.getElementById("txtFecha").value = "";
+	//document.getElementById("txtFecha").value = "";
 }
 
 function disableCliente() {
@@ -95,4 +102,34 @@ function actualizarSubtotal(){
 	var cantidad = document.getElementById("txtCantidad").value;
 	var subtotal = cantidad * valorUnitario;
 	document.getElementById("txtSubtotal").value = subtotal;
+}
+
+function getOptionValues() {
+	// Get the select element as a whole
+    let selectElement = document.getElementById('txtProductos');
+	// Get the selected option
+	let selectedOption = selectElement.value;
+	
+	// Get the options as an array
+    let optionValues = Array.from(selectElement.options).map(option => option.value);
+	
+	// Remove the first option of the Array
+	optionValues.shift();
+
+	// Remove the selected option from the Array
+    optionValues = optionValues.filter(option => option !== selectedOption);
+	return optionValues;
+}
+
+function addRow(tableID) {
+	var table = document.getElementById(tableID);
+	
+	var rowCount = table.rows.length;
+	var row = table.insertRow(rowCount);
+	var colCount = table.rows[0].cells.length;
+
+	for(var i=0; i<colCount; i++) {
+		var newcell = row.insertCell(i);
+		newcell.innerHTML = table.rows[1].cells[i].innerHTML;
+	}
 }

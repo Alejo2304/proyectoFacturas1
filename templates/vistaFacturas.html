@@ -115,7 +115,7 @@
 										<div class="form-group">
 											<label>Numero</label>
 											<input type="text" id="txtNumero" name="txtNumero" class="form-control" value="{{ factura['numero'] }}" disabled>
-											<input type="hidden" name="txtNumero" value="{{ factura['numero'] }}"><!--This is to send the value to the controller-->
+											<!--This is to send the value to the controller-->
 										</div>
 										<!--Arreglar el input de fecha a tipo date para corregir los datos-->
 										<!-- It is needed to fix the format of the date so it matches postgres-->
@@ -134,20 +134,35 @@
 										<!--This Cliente must be a drop menu instead of a text input-->
 										<div class="form-group">
 											<label>Cliente</label>
-											<input type="text" id="txtCliente" name="txtCliente" class="form-control" value="{{ factura['cliente'] }}">
+											<select id="txtCliente" name="txtCliente" class="form-control">
+												{% for cliente in arregloClientes %}
+												<option value="{{cliente.getCodigo()}}">
+													{{ cliente.getCodigo() ~ ' - ' ~cliente.getNombre() }}
+												</option>
+												{% endfor %}
+											</select>
+											<!--<input type="text" id="txtCliente" name="txtCliente" class="form-control" value="{{ factura['cliente'] }}"> -->
 										</div>
 
 										<!--This Vendedor must be a drop menu instead of a text input-->
 										<div class="form-group">
 											<label>Vendedor</label>
-											<input type="text" id="txtVendedor" name="txtVendedor" class="form-control" value="{{ factura['vendedor'] }}">
+											<select id="txtVendedor" name="txtVendedor" class="form-control">
+												{% for vendedor in arregloVendedores %}
+												<option value="{{vendedor.getCodigo()}}">
+													{{ vendedor.getCodigo() ~ ' - ' ~vendedor.getNombre() }}
+												</option>
+												{% endfor %}
+											</select>
+											
+											<!--<input type="text" id="txtVendedor" name="txtVendedor" class="form-control" value="{{ factura['vendedor'] }}">-->
 										</div>
 
 										<div class="form-group">
 											<button id="btnGuardar" name="bt" value="Guardar" class="btn btn-success" onmouseover="disableNumero(); disableTotal()">Guardar</button>
 											<input type="submit" id="btnConsultar" name="bt" value="Consultar" class="btn btn-success" onmouseover="enableNumero()"/>
 
-											<a href="#modificarModal" class="btn btn-danger" onmouseover="enableNumero(); disableTotal()" data-toggle="modal"><span>Modificar</span></a>	
+											<a href="#modificarModal" class="btn btn-danger" onmouseover="enableNumero()" data-toggle="modal"><span>Modificar</span></a>	
 											<a href="#borrarModal" class="btn btn-danger" onmouseover="enableNumero(); disableTotal()" data-toggle="modal"><span>Borrar</span></a>
 										</div>	
 									</div>
@@ -156,7 +171,7 @@
 										<div class="container">
 											<div class="row">
 											  <div class="col-12">
-												<table class="table table-bordered">
+												<table id="tableProductos" class="table table-bordered">
 												  <thead>
 													<tr>
 													  <th scope="col">Producto</th>
@@ -167,36 +182,37 @@
 
 													</tr>
 												  </thead>
-												  <tbody>
-													<tr>
-													  <th scope="row">
-														<select name="Productos" id="">
-															<option value="1">Producto 1</option>
-															<option value="2">Producto 2</option>
-															<option value="3">Producto 3</option>
-															<option value="4">Producto 4</option>
-															<option value="5">Producto 5</option>
+												  <tbody id="tbodyProductos">
+													<tr id="trTableProductos">
+													  <td scope="row">
+														<select id="txtProductos" name="txtProductos">
+															<option selected disabled>Seleccione el producto.</option>
+															{% for producto in arregloProductos %}
+															<option value="{{producto.getCodigo()}}" data-valorunitario="{{producto.getValorUnitario()}}">
+																{{ producto.getCodigo() ~ ' - ' ~producto.getNombre() }}
+															</option>
+															{% endfor %}
 														</select>
-
-													  </th>
-													  <td>
-														<input type="text" name="valorUnitario" id="txtValorUnitario" value="5000"  disabled style="border: none;">
 													  </td>
 													  <td>
-														<input type="number" name="cantidad" id="txtCantidad" min="1" max="100" value="1" oninput="actualizarSubtotal()">
+														<input type="text" name="valorUnitario" id="txtValorUnitario"  disabled style="border: none;">
 													  </td>
 													  <td>
-														<input type="text" name="valorUnitario" id="txtSubtotal" value="5000"  disabled style="border: none;">
+														<input type="number" name="txtcantidad" id="txtCantidad" min="1" max="100" onchange="actualizarSubtotal()">
 													  </td>
 													  <td>
-														<button type="button" class="btn btn-primary"><i class="far fa-eye">+</i></button>
+														<input type="text" name="txtSubtotal" id="txtSubtotal" value="0"  disabled style="border: none;">
+													  </td>
+													  <td>
+														<button type="button" class="btn btn-primary" onclick="addRow('tableProductos')"><i class="far fa-eye">+</i></button>
 													  </td>
 													</tr>
-													<td>
-														
-													  </td>
+													
 												  </tbody>
 												</table>
+												
+												<!--ESTE BUTON ES UN EJEMPLO DE COMO LO ACOMODAMOS-->
+												<button type="button" class="btn btn-primary" onclick="getOptionValues()">Guardar Producto</button>
 											  </div>
 											</div>
 										  </div>
@@ -277,8 +293,8 @@
 							<h5>Está seguro(a) de modificar este registro?</h5>
 						</div>
 						<div class="modal-footer">
-							<input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
-							<button class="btn btn-danger" id="btnModificar" name="bt" value="Modificar">Modificar</button>
+							<input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel"/>
+							<button type="button" class="btn btn-danger" id="btnModificar" name="bt" value="Modificar">Modificar</button>
 						</div>
 				</div>
 			</div>

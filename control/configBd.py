@@ -20,3 +20,12 @@ usua="proyectofacturas2024"
 passw="Facturas2024*"
 bdat="proyectofacturas2024_bdfacturas"
 port=5432'''
+
+'''
+#Servidor Local 
+serv="localhost"
+usua="postgres"
+passw="postgres"
+bdat="dbfacturas"
+port=5432
+'''
