@@ -1,3 +1,8 @@
+
+
+/**
+ * Initializes the document when it is ready.
+ */
 $(document).ready(function(){
 	// Activate tooltip
 	$('[data-toggle="tooltip"]').tooltip();
@@ -26,33 +31,52 @@ $(document).ready(function(){
 	$("#btnBorrarItem").click(function(event) {
 	   return false;
     });
-	 	
 });
 
-//This function update the value of txtValorUnitario on vistaFactura.html
+/**
+ * Updates the value of txtValorUnitario on vistaFactura.html.
+ */
 $(document).ready(function(){
-    $(document).on('change', '#txtProductos', function(){
+    /**
+     * Event listener for the change event on #txtProductos.
+     * Updates the value of txtValorUnitario based on the selected option.
+     * @param {Event} event - The change event.
+     */
+    $(document).on('change', '#txtProductos', function(event){
         var selectedValue = $('option:selected', this).data('valorunitario');
         $(this).closest('tr').find("#txtValorUnitario").val(selectedValue);
     });
 });
 
+/**
+ * Adds an item to a select element.
+ * @param {string} IDdesde - The ID of the source element.
+ * @param {string} IDhasta - The ID of the target select element.
+ */
 function agregarItem(IDdesde, IDhasta){
     var option = document.createElement("option");
     option.text = document.getElementById(IDdesde).value;
     document.getElementById(IDhasta).add(option);
     removerItem(IDdesde);
 	selectTodos(IDhasta);
-  }
+}
 
- function removerItem(IDelemento){
+/**
+ * Removes the selected item from a select element.
+ * @param {string} IDelemento - The ID of the select element.
+ */
+function removerItem(IDelemento){
 	var comboBox = document.getElementById(IDelemento);
     comboBox = comboBox.options[comboBox.selectedIndex];
     comboBox.remove();
 	selectTodos(IDelemento);
-  }
+}
 
-  function selectTodos(IDelemento) {
+/**
+ * Selects all options in a select element.
+ * @param {string} IDelemento - The ID of the select element.
+ */
+function selectTodos(IDelemento) {
     var elementos = document.getElementById(IDelemento);
     elementos = elementos.options;
     for (var i = 0; i < elementos.length; i++) {
@@ -60,43 +84,68 @@ function agregarItem(IDdesde, IDhasta){
     }
 }
 
+/**
+ * Updates the value of a hidden input element with the selected value from a select element.
+ * @param {string} combo - The ID of the select element.
+ * @param {string} txtOculto - The ID of the hidden input element.
+ */
 function actualizarValorSeleccionado(combo,txtOculto) {
 	var select = document.getElementById(combo);
 	var valorSeleccionado = select.value;
 	document.getElementById(txtOculto).value = valorSeleccionado;
-  }
+}
 
+/**
+ * Enables the input element with ID "txtNumero".
+ */
 function enableNumero() {
 	document.getElementById("txtNumero").disabled = false;
 	document.getElementById("txtNumero").focus();
-  }
+}
 
+/**
+ * Disables the input element with ID "txtNumero".
+ */
 function disableNumero() {
 	document.getElementById("txtNumero").disabled = true;
 	//document.getElementById("txtNumero").value = 0;
 }
 
+/**
+ * Disables the input element with ID "txtTotal".
+ */
 function disableTotal() {
 	document.getElementById("txtTotal").disabled = true;
 	//document.getElementById("txtTotal").value = "NULL";
 }
 
+/**
+ * Disables the input element with ID "txtFecha".
+ */
 function disableFecha() {
 	document.getElementById("txtFecha").disabled = true;
 	//document.getElementById("txtFecha").value = "";
 }
 
+/**
+ * Disables the input element with ID "txtCliente".
+ */
 function disableCliente() {
 	document.getElementById("txtCliente").disabled = true;
 	document.getElementById("txtCliente").value = "";
 }
 
+/**
+ * Disables the input element with ID "txtVendedor".
+ */
 function disableVendedor() {
 	document.getElementById("txtVendedor").disabled = true;
 	document.getElementById("txtVendedor").value = "";
 }
 
-
+/**
+ * Updates the value of txtSubtotal based on the values of txtValorUnitario and txtCantidad.
+ */
 function actualizarSubtotal(){
 	var valorUnitario = document.getElementById("txtValorUnitario").value;
 	var cantidad = document.getElementById("txtCantidad").value;
@@ -104,6 +153,10 @@ function actualizarSubtotal(){
 	document.getElementById("txtSubtotal").value = subtotal;
 }
 
+/**
+ * Retrieves the values of the options in the select element with ID "txtProductos".
+ * @returns {Array} - An array of objects containing the value and valorunitario of each option.
+ */
 function getOptionValues() {
     // Get the select element as a whole
     let selectElement = document.getElementById('txtProductos');
@@ -129,7 +182,6 @@ function getOptionValues() {
 
 /**
  * Adds a new row to the specified table.
- * 
  * @param {string} tableID - The ID of the table to add the row to.
  */
 function addRow(tableID) {
@@ -139,6 +191,13 @@ function addRow(tableID) {
 	var row = table.insertRow(rowCount);
 	var colCount = table.rows[0].cells.length;
 	var optionValues = getOptionValues();
+	disableButton = false;
+
+	//This will be used to disable the button once all products are selected.
+	if (optionValues.length === 0) {
+		disableButton = true;
+	}
+
 
 	selectElement = document.getElementById('txtProductos');
 	selectElement.id = "txtProductos" + (rowCount-1);
@@ -155,6 +214,11 @@ function addRow(tableID) {
 	selectElement = document.getElementById('txtSubtotal');
 	selectElement.id = "txtSubtotal" + (rowCount-1);
 	selectElement.name = "txtSubtotal" + (rowCount-1);
+
+	selectElement = document.getElementById('rowButton');
+	selectElement.id = "rowButton" + (rowCount-1);
+	selectElement.name = "rowButton" + (rowCount-1);
+	selectElement.onclick = function() { addRow('tableProductos'); updateButton(); };
 
 	// Create a new select element
 	var select = document.createElement("select");
@@ -184,8 +248,9 @@ function addRow(tableID) {
 	// Add the remaining cells to the new row
 	for(var i = 1; i < colCount; i++) {
 		var newCell = row.insertCell(i);
-		newCell.innerHTML = table.rows[1].cells[i].innerHTML;
+		newCell.innerHTML = table.rows[rowCount-1].cells[i].innerHTML;
 		var childElements = newCell.children;
+		//update the id of the new row added.
 		for(var j = 0; j < childElements.length; j++) {
 			if (childElements[j].id) {
 				var oldId = childElements[j].id;
@@ -193,5 +258,30 @@ function addRow(tableID) {
 				childElements[j].id = newId;
 			}
 		}
+	}	
+	//This will disable the button if there are no more products to add.
+	if (disableButton == true){
+		document.getElementById("rowButton").disabled = true;
+		document.getElementById("txtCantidad").disabled = true;
 	}
+}
+
+/**
+ * Updates the button in the last row of the table.
+ */
+function updateButton(){
+	var table = document.getElementById("tableProductos");
+	var rowCount = table.rows.length;
+	console.log("rowCount: "+rowCount);
+	var button = document.getElementById("rowButton"+(rowCount-2));
+	button.className = "btn btn-danger";
+	button.innerHTML = '<i class="far fa-eye">-</i>';
+	button.onclick =  dropRow;
+}
+
+/**
+ * Drops the last row from the table.
+ */
+function dropRow(){
+	console.log("dropRow");
 }
