@@ -10,6 +10,7 @@ from control.ControlProductosPorFactura import ControlProductosPorFactura
 from modelo.Cliente import Cliente
 from control.ControlCliente import ControlCliente
 from modelo.Vendedor import Vendedor
+from modelo.Persona import Persona
 from control.ControlVendedor import ControlVendedor
 from modelo.Producto import Producto
 from control.ControlProducto import ControlProducto
@@ -171,9 +172,24 @@ def vista_Facturas():
                 objProductosPorFactura.setFactura(factura['numero'])
                 objControlProductosPorFactura = ControlProductosPorFactura(objProductosPorFactura)
                 arregloProductosPorFactura = objControlProductosPorFactura.consultarPorFactura()
-                
-                ######################################################################### 
 
+                #########################################################################
+                #This block of code is used to get the client associated with the invoice
+                objPersona = Persona(None, None, None, None)
+                objCliente = Cliente(None, None)
+                objControlCliente = ControlCliente(objPersona, objCliente)
+                objControlCliente.consultarPorCliente(factura['cliente'])
+                factura['cliente'] = f"{objControlCliente.objCliente.getCodigo()} - {objControlCliente.objCliente.getNombre()}"
+
+                ######################################################################### 
+                #This block of code is used to get the seller associated with the invoice
+                objPersona = Persona(None, None, None, None)
+                objVendedor = Vendedor(None, None)
+                objControlVendedor = ControlVendedor(objPersona, objVendedor)
+                objControlVendedor.consultarPorVendedor(factura['vendedor'])
+                factura['vendedor'] = f"{objControlVendedor.objVendedor.getCodigo()} - {objControlVendedor.objVendedor.getNombre()}"
+            
+                #########################################################################
                 return render_template('/vistaFacturas.html',ema=ema,arregloFacturas=arregloFacturas,arregloClientes=arregloClientes, arregloProductos= arregloProductos, arregloProductosPorFactura=arregloProductosPorFactura, arregloVendedores=arregloVendedores,factura=factura,paginacion=paginacion)
             except Exception as objException:
                 print("diablos")

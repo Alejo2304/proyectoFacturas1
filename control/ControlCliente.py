@@ -74,6 +74,28 @@ class ControlCliente():
             print(msg)
 
         return self.objCliente
+    
+    def consultarPorCliente(self, IdCliente):
+        msg = "ok"
+        comandoSql = "SELECT * FROM persona inner join cliente on cliente.fkcodpersona=persona.codigo where cliente.id = '{}'".format(IdCliente)
+        objControlConexion = ControlConexion()
+        msg = objControlConexion.abrirBd(usua, passw, serv, port, bdat)
+        cursor = objControlConexion.ejecutarComandoSql(comandoSql)
+        try:
+            if cursor.rowcount > 0: 
+                for fila in cursor:           
+                    self.objVendedor = Cliente(0)
+                    self.objCliente.setCodigo(fila[0])
+                    self.objCliente.setNombre(fila[1])
+                    self.objCliente.setEmail(fila[2]) #fixed bug with setEmail and setTelefono
+                    self.objCliente.setTelefono(fila[3])
+                    self.objCliente.setcredito(fila[5])
+            objControlConexion.cerrarBd()
+        except Exception as objException:
+            msg = "Algo salió mal: {}".format(objException)
+            print(msg)
+
+        return self.objCliente
 
     def guardar(self):
         
