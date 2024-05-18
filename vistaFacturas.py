@@ -5,19 +5,14 @@ import math
 
 from modelo.Factura import Factura
 from control.ControlFactura import ControlFactura
+from modelo.ProductosPorFactura import ProductosPorFactura
+from control.ControlProductosPorFactura import ControlProductosPorFactura
 from modelo.Cliente import Cliente
 from control.ControlCliente import ControlCliente
 from modelo.Vendedor import Vendedor
 from control.ControlVendedor import ControlVendedor
 from modelo.Producto import Producto
 from control.ControlProducto import ControlProducto
-from modelo.ProductosPorFactura import ProductosPorFactura
-from control.ControlProductosPorFactura import ControlProductosPorFactura
-#needed to import modelo.Producto
-#needed to import control.ControlProducto
-#needed to import modelo.ProductoFactura
-#needed to import control.ControlProductoFactura
-
 
 
 vistaFacturas=Blueprint("vistaFacturas",__name__,static_folder="static",template_folder="templates")
@@ -27,7 +22,10 @@ vistaFacturas=Blueprint("vistaFacturas",__name__,static_folder="static",template
 
 @vistaFacturas.route("/")
 
+
+
 def vista_Facturas():
+    
     """
     This function handles the logic for the 'vista_Facturas' view.
 
@@ -49,13 +47,6 @@ def vista_Facturas():
     'total':'',
     'cliente':'',
     'vendedor':''
-    }
-    ProductosPorFactura = {
-    'id': '',
-    'producto':'',
-    'valorUnitario':'',
-    'cantidad':'',
-    'subtotal':''
     }
     
     if 'ema' in session:
@@ -83,9 +74,7 @@ def vista_Facturas():
 
     objControlProducto=ControlProducto(None)
     arregloProductos=objControlProducto.listar()
-
-    objControlProductoPorFactura=ControlProductosPorFactura(None)
-    arregloProductosPorFactura=objControlProductoPorFactura.listar()
+    
 
     def updatePagination(arreglo):
         totalItems=len(arreglo)
@@ -121,6 +110,7 @@ def vista_Facturas():
         return paginacion
     
     paginacion=updatePagination(arregloFacturas)
+    
 
     if request.method == 'GET':
         pass
@@ -145,18 +135,18 @@ def vista_Facturas():
         'vendedor':ven
         }
 
+        
 
         if request.form.get('combo2') != paginacion['itemsxpagina']:
             updatePagination(arregloFacturas)
 
-            return render_template('/vistaFacturas.html',ema=ema,arregloFacturas=arregloFacturas,arregloClientes=arregloClientes, arregloProductos= arregloProductos,arregloVendedores=arregloVendedores,factura=factura,paginacion=paginacion)
+            return render_template('/vistaFacturas.html',ema=ema,arregloFacturas=arregloFacturas,arregloClientes=arregloClientes, arregloProductos= arregloProductos,arregloProductosPorFactura=arregloProductosPorFactura,arregloVendedores=arregloVendedores,factura=factura,paginacion=paginacion)
         
         if bt=='Guardar':
             try:
                 objFactura=Factura(None,fec,tot,cli,ven)
                 objControlFactura=ControlFactura(objFactura)
                 objControlFactura.guardar()
-                print("Joda mani cule test guardao", factura['cliente'])
             except Exception as objException:
                 msg="Algo salió mal: {}".format(objException)
             return redirect('/vistaFacturas')	
@@ -172,12 +162,25 @@ def vista_Facturas():
                 factura['total'] = objControlFactura.objFactura.getTotal()
                 factura['cliente'] = objControlFactura.objFactura.getCliente()
                 factura['vendedor'] = objControlFactura.objFactura.getVendedor()
-                print("Joda mani cule test", factura['cliente'])
                 #This line convert the date to a string
                 factura['fecha'] = factura['fecha'].strftime("%Y-%m-%d")
+                '''
+                #TO DO:
+                #Get the products for the current invoice
+                #Render ProductosPorFactura
+                ########################################################################
+                '''
+                objProductosPorFactura = ProductosPorFactura(None, None, None, None)
+                objProductosPorFactura.setFactura(factura['numero'])
+                objControlProductosPorFactura = ControlProductosPorFactura(objProductosPorFactura)
+                arregloProductosPorFactura = objControlProductosPorFactura.consultarPorFactura()
+                
 
-                return render_template('/vistaFacturas.html',ema=ema,arregloFacturas=arregloFacturas,arregloClientes=arregloClientes,arregloProductos= arregloProductos,arregloVendedores=arregloVendedores,factura=factura,paginacion=paginacion)
+                ######################################################################### 
+
+                return render_template('/vistaFacturas.html',ema=ema,arregloFacturas=arregloFacturas,arregloClientes=arregloClientes, arregloProductos= arregloProductos, arregloProductosPorFactura=arregloProductosPorFactura, arregloVendedores=arregloVendedores,factura=factura,paginacion=paginacion)
             except Exception as objException:
+                print("diablos")
                 msg="Algo salió mal: {}".format(objException)
             return redirect('/vistaFacturas')
         
@@ -210,4 +213,4 @@ def vista_Facturas():
             pass
         elif bt== 'BorrarVarios':
             pass
-    return render_template('/vistaFacturas.html',ema=ema,arregloFacturas=arregloFacturas,arregloClientes=arregloClientes,arregloVendedores=arregloVendedores,arregloProductos= arregloProductos,factura=factura,paginacion=paginacion)
+    return render_template('/vistaFacturas.html',ema=ema,arregloFacturas=arregloFacturas,arregloClientes=arregloClientes,arregloVendedores=arregloVendedores,arregloProductosPorFactura=arregloProductosPorFactura,arregloProductos= arregloProductos,factura=factura,paginacion=paginacion)

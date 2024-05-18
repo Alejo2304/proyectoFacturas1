@@ -51,6 +51,36 @@ class ControlProductosPorFactura():
             print(msg)
         return self.objProductosPorFactura
     
+    def consultarPorFactura(self):
+        """
+        Consults the products associated with a specific invoice.
+
+        Returns:
+            list: A list of ProductosPorFactura objects representing the products associated with the invoice.
+        """
+        msg = "ok"
+        fac = self.objProductosPorFactura.getFactura()
+        comandoSql = "SELECT * FROM productosporfactura WHERE fknumfactura = '{}'".format(fac)
+        objControlConexion = ControlConexion()
+        msg = objControlConexion.abrirBd(usua, passw, serv, port, bdat)
+        cursor = objControlConexion.ejecutarComandoSql(comandoSql)
+        productosPorFactura = []
+        try:
+            if cursor.rowcount > 0:
+                for fila in cursor:
+                    self.objProductosPorFactura = ProductosPorFactura()
+                    self.objProductosPorFactura.setFactura(fila[0])
+                    self.objProductosPorFactura.setProducto(fila[1])
+                    self.objProductosPorFactura.setCantidad(fila[2])
+                    self.objProductosPorFactura.setSubtotal(fila[3])
+                    productosPorFactura.append(self.objProductosPorFactura)
+            objControlConexion.cerrarBd()
+        except Exception as objException:
+            print("verga chamo linea 79 controlProductosPorFactura.py")
+            msg = "Algo salió mal: {}".format(objException)
+            print(msg)
+        return productosPorFactura
+
     def guardar(self):
         msg = "ok"
         fac = self.objProductosPorFactura.getFactura()

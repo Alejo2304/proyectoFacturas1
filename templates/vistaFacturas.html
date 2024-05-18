@@ -183,7 +183,37 @@
 													</tr>
 												  </thead>
 												  <tbody id="tbodyProductos">
-													<tr id="trTableProductos">
+													{% set i = arregloProductosPorFactura|length %}
+													{% set x = 0 %}
+													{% for producto in arregloProductosPorFactura %}
+														{% if x != i %}
+															{% set x = x + 1 %}
+														{% endif %}
+													<tr>
+													  <td scope="row">
+														<select id="txtProductos{{ i }}" name="txtProductos{{ i }}">
+															<option selected disabled>{{producto.getProducto()}}</option>
+														</select>
+
+														</select>
+													  </td>
+													  <td>
+														<input type="text" name="valorUnitario{{ i }}" id="txtValorUnitario{{ i }}"  value="{{producto.getSubtotal()/producto.getCantidad()}}" disabled style="border: none;" disabled>
+													  </td>
+													  <td>
+														<input type="number" name="txtcantidad{{ i }}" id="txtCantidad{{ i }}" min="1" max="100" onchange="actualizarSubtotal()" value="{{producto.getCantidad()}}">
+													  </td>
+													  <td>
+														<input type="text" name="txtSubtotal{{ i }}" id="txtSubtotal{{ i }}" value="{{producto.getSubtotal()}}"  disabled style="border: none;">
+													  </td>
+													  <td>
+														<button type="button" id="rowButton{{ i }}" class="btn btn-danger" onclick="dropRow()"><i class="far fa-eye">-</i></button>
+													  </td>
+													</tr> 
+													{% endfor %}
+
+													<tr>
+
 													  <td scope="row">
 														<select id="txtProductos" name="txtProductos">
 															<option selected disabled>Seleccione el producto.</option>
