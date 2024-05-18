@@ -164,18 +164,14 @@ def vista_Facturas():
                 factura['vendedor'] = objControlFactura.objFactura.getVendedor()
                 #This line convert the date to a string
                 factura['fecha'] = factura['fecha'].strftime("%Y-%m-%d")
-                '''
-                #TO DO:
-                #Get the products for the current invoice
-                #Render ProductosPorFactura
-                ########################################################################
-                '''
+                
+                #########################################################################
+                #This block of code is used to get the products associated with the invoice
                 objProductosPorFactura = ProductosPorFactura(None, None, None, None)
                 objProductosPorFactura.setFactura(factura['numero'])
                 objControlProductosPorFactura = ControlProductosPorFactura(objProductosPorFactura)
                 arregloProductosPorFactura = objControlProductosPorFactura.consultarPorFactura()
                 
-
                 ######################################################################### 
 
                 return render_template('/vistaFacturas.html',ema=ema,arregloFacturas=arregloFacturas,arregloClientes=arregloClientes, arregloProductos= arregloProductos, arregloProductosPorFactura=arregloProductosPorFactura, arregloVendedores=arregloVendedores,factura=factura,paginacion=paginacion)
